@@ -267,6 +267,7 @@ SelectFormField.propTypes = assign({}, FormField.propTypes, {
     optionFilterProp: React.PropTypes.string,
     dataType: React.PropTypes.string
 });
+
 SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
     jsxstyle: {},
     jsxplaceholder: "请下拉选择",
