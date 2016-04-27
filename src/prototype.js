@@ -13,8 +13,11 @@ module.exports = Bundle.createPrototype({
     canDraging: true,
     isInline: true,
     isContainer: false,
-    canDropto: true,
-    conDroping: false,
+    canDropto: function(container) {
+        let name = container.getComponentName();
+        return /FormRow|Form/.test(name);
+    },
+    canDroping: false,
     configure: [{
             name: "style",
             title: "样式",
