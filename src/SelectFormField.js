@@ -125,11 +125,8 @@ class SelectFormField extends FormField {
             let arr = values.map(function(value, index) {
                 let content = ""
                 let {multiple, jsxmultiple, combobox, jsxcombobox} = me.props;
-                if (multiple == true || jsxmultiple == true || combobox == true || jsxcombobox == true) {
-                    content = me.state.data[value];
-                } else {
-                    content = <span title={me.state.data[value]}>{me.state.data[value]}</span>;
-                }
+                content = me.state.data[value];
+
                 return <Option key={value} title={me.state.data[value]}>
                          {content}
                        </Option>
@@ -170,6 +167,17 @@ class SelectFormField extends FormField {
         } else {
             return me.props.jsxprefixCls
         }
+    }
+
+    getValuePropValue(child) {
+        let key = "";
+        if ('value' in child.props) {
+            key = child.props.value;
+        }
+        else {
+            key = child.key;
+        }
+        return key;
     }
 
     hasDeprecatedProps() {
@@ -215,10 +223,6 @@ class SelectFormField extends FormField {
                 }
             });
 
-            if (Object.keys(me.props.jsxdata).length > 0) {
-                options.optionFilterProp = 'title';
-            }
-
             // only jsxfetchUrl mode need pass label, for the options always change.
             // when mount, state.label is undefined, which cause defalutValue cannot be used.
             if (!!me.props.jsxfetchUrl || !!me.props.onSearch) {
@@ -240,9 +244,27 @@ class SelectFormField extends FormField {
             if (me.state.value) {
                 let value = me._processValue();
                 let values = !isArray(value) ? [value] : value;
-                str = values.map((item) => {
-                    return item.key;
-                }).join(" ");
+                // labelInValue mode
+                if (me.props.jsxfetchUrl || me.props.onSearch) {
+                    str = values.map((item) => {
+                        return item.label;
+                    }).join(" ");
+                }
+                // <Option> mode
+                else if (me.props.children) { 
+                    me.props.children && me.props.children.forEach((child, index) => {
+                        let valuePropValue = me.getValuePropValue(child);
+                        if (values.indexOf(valuePropValue) !== -1) {
+                            str += child.props[me.props.optionLabelProp] + " ";
+                        }
+                    })
+                }
+                // only jsxdata
+                else {
+                    values.forEach((value, index) => {      
+                        str += me.state.data[value] + " ";        
+                    });
+                }
             }
             arr.push(<span key="select">{str}</span>);
         }
