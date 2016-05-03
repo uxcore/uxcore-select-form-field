@@ -19,9 +19,28 @@ module.exports = Bundle.createPrototype({
     },
     canDroping: false,
     configure: [{
-            name: "style",
-            title: "样式",
-            defaultValue: {},
+            name: "jsxlabel",
+            title: "标签名",
+            defaultValue: "表单一",
+            required: false,
+            fieldStyle: "block",
+            fieldCollapsed: false,
+            setter: <TextSetter multiline={true} rows={2} />
+        }, {
+            name: "jsxname",
+            title: "表单域name",
+            defaultValue: "select1",
+            required: true,
+            fieldStyle: "block",
+            fieldCollapsed: false,
+            setter: <TextSetter multiline={true} rows={2} />
+        }, {
+            name: "jsxdata",
+            title: "数据源",
+            defaultValue: {
+                a: '选项A',
+                b: '选项B'
+            },
             required: false,
             fieldStyle: "accordion",
             fieldCollapsed: false,
@@ -49,14 +68,6 @@ module.exports = Bundle.createPrototype({
             fieldStyle: "block",
             fieldCollapsed: false,
             setter: <BoolSetter />
-        }, {
-            name: "jsxdata",
-            title: "数据源",
-            defaultValue: {},
-            required: false,
-            fieldStyle: "accordion",
-            fieldCollapsed: false,
-            setter: <JsonSetter />
         }, {
             name: "showSearch",
             title: "显示搜索框",
@@ -130,22 +141,6 @@ module.exports = Bundle.createPrototype({
             fieldStyle: "block",
             fieldCollapsed: false,
             setter: <NumberSetter />
-        }, {
-            name: "jsxname",
-            title: "表单域name",
-            defaultValue: "",
-            required: true,
-            fieldStyle: "block",
-            fieldCollapsed: false,
-            setter: <TextSetter multiline={true} rows={2} />
-        }, {
-            name: "jsxlabel",
-            title: "标签名",
-            defaultValue: "",
-            required: false,
-            fieldStyle: "block",
-            fieldCollapsed: false,
-            setter: <TextSetter multiline={true} rows={2} />
         }, {
             name: "jsxtips",
             title: "提示文案",

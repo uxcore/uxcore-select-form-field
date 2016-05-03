@@ -1,3 +1,7 @@
+## 0.1.5
+
+* `CHANGED` add defaultProps in `prototype.js`
+
 ## 0.1.4
 
 * `FIX` fix bug in view mode
