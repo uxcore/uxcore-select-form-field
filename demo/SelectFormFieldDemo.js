@@ -20,12 +20,22 @@ class Demo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            jsxdata: {
-                "bj": "北",
-                "nj": "南",
-                "dj": "东",
-                "xj": "西"
-            },
+            // jsxdata: {
+            //     "bj": "北",
+            //     "nj": "南",
+            //     "dj": "东",
+            //     "xj": "西"
+            // },
+            jsxdata: [
+                {
+                    value: "bj",
+                    text: "北京"
+                },
+                {
+                    value: "nj",
+                    text: "南京" 
+                }
+            ],
             mode: Constants.MODE.EDIT
         }
     }
@@ -40,8 +50,15 @@ class Demo extends React.Component {
     renderOptions() {
         let me = this;
         let arr = [];
-        for (let key in me.state.jsxdata) {
-            arr.push(<Option key={key}>{me.state.jsxdata[key]}</Option>)
+        if (me.state.jsxdata instanceof Array) {
+            arr = me.state.jsxdata.map((item) => {
+                return <Option key={item.value}>{item.text}</Option>
+            })
+        }
+        else {
+            for (let key in me.state.jsxdata) {
+                arr.push(<Option key={key}>{me.state.jsxdata[key]}</Option>)
+            }
         }
         return arr;
     }

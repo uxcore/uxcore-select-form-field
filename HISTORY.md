@@ -1,3 +1,7 @@
+## 0.1.6
+
+* `NEW` prop `jsxdata` support array like [{value: xxx, text: xxx}]
+
 ## 0.1.5
 
 * `CHANGED` add defaultProps in `prototype.js`

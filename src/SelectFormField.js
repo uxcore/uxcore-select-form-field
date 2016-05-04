@@ -15,7 +15,7 @@ class SelectFormField extends FormField {
         super(props);
         let me = this;
         assign(me.state, {
-            data: props.jsxdata
+            data: me._processData(props.jsxdata)
         })
     }
 
@@ -26,7 +26,7 @@ class SelectFormField extends FormField {
         }
         if (!me._isEqual(nextProps.jsxdata, me.props.jsxdata)) {
             me.setState({
-                data: nextProps.jsxdata
+                data: me._processData(nextProps.jsxdata)
             });
         }
     }
@@ -82,9 +82,9 @@ class SelectFormField extends FormField {
                 q: value
             }),
             success: (data) => {
-                let fetchData = me.props.afterFetch(data);
+                let fetchData = me._processData(me.props.afterFetch(data));
                 if (!!me.props.jsxdata) {
-                    fetchData = assign({}, fetchData, me.props.jsxdata);
+                    fetchData = me._processData(me.props.jsxdata).concat(fetchData)
                 }
                 me.setState({
                     data: fetchData
@@ -112,9 +112,31 @@ class SelectFormField extends FormField {
             me.props.onSearch && me.props.onSearch(value);
         }
     }
-    _processData() {
+    /**
+     * jsxdata can be one of two types: hash map or array
+     * hash map is like {value: text}
+     * array is like [{value: xxx, text: xxx}]
+     */
+
+    _processData(data) {
+        let values = [];
+        if (typeof data == 'object' && !(data instanceof Array)) {
+            let keys = Object.keys(data);
+            values = keys.map((key) => {
+                return {
+                    value: key,
+                    text: data[key]
+                }
+            });
+        }
+        else {
+            values = data;
+        }
+        return values;
+    }
+    _generateOptionsFromData() {
         let me = this;
-        let values = Object.keys(me.state.data);
+        let values = me.state.data;
         let children = me.props.children;
         if (!values.length) {
             // console.warn("You need to pass data to initialize Select.");
@@ -122,13 +144,11 @@ class SelectFormField extends FormField {
                 return children;
             }
         } else {
-            let arr = values.map(function(value, index) {
-                let content = ""
+            let arr = values.map(function(item, index) {
                 let {multiple, jsxmultiple, combobox, jsxcombobox} = me.props;
-                content = me.state.data[value];
 
-                return <Option key={value} title={me.state.data[value]}>
-                         {content}
+                return <Option key={item.value} title={item.text}>
+                         {item.text}
                        </Option>
             });
             return arr;
@@ -237,7 +257,7 @@ class SelectFormField extends FormField {
                 options.filterOption = false;
             }
             arr.push(<Select {...options}>
-                       {me._processData()}
+                       {me._generateOptionsFromData()}
                      </Select>);
         } else if (mode == Constants.MODE.VIEW) {
             let str = '';
@@ -245,7 +265,7 @@ class SelectFormField extends FormField {
                 let value = me._processValue();
                 let values = !isArray(value) ? [value] : value;
                 // labelInValue mode
-                if (me.props.jsxfetchUrl || me.props.onSearch) {
+                if (me.props.jsxfetchUrl || me.props.onSearch || me.props.labelInValue) {
                     str = values.map((item) => {
                         return item.label;
                     }).join(" ");
@@ -262,7 +282,7 @@ class SelectFormField extends FormField {
                 // only jsxdata
                 else {
                     values.forEach((value, index) => {      
-                        str += me.state.data[value] + " ";        
+                        str += value.text + " ";        
                     });
                 }
             }
@@ -278,7 +298,10 @@ SelectFormField.propTypes = assign({}, FormField.propTypes, {
     jsxstyle: React.PropTypes.object,
     jsxplaceholder: React.PropTypes.string,
     jsxcombobox: React.PropTypes.bool,
-    jsxdata: React.PropTypes.object,
+    jsxdata: React.PropTypes.oneOfType([
+        React.PropTypes.object,
+        React.PropTypes.array
+    ]),
     beforeFetch: React.PropTypes.func,
     afterFetch: React.PropTypes.func,
     jsxshowSearch: React.PropTypes.bool,
