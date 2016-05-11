@@ -134,6 +134,15 @@ class SelectFormField extends FormField {
         }
         return values;
     }
+
+    _transferDataToObj(data) {
+        let obj = {};
+        data.forEach((item, index) => {
+            let key = (item.value == "" ? "__all__" : item.value);
+            obj[key] = item.text;
+        })
+        return obj;
+    }
     _generateOptionsFromData() {
         let me = this;
         let values = me.state.data;
@@ -282,7 +291,7 @@ class SelectFormField extends FormField {
                 // only jsxdata
                 else {
                     values.forEach((value, index) => {      
-                        str += value.text + " ";        
+                        str += me._transferDataToObj(me.state.data)[value == "" ? "__all__" : value] + " ";        
                     });
                 }
             }

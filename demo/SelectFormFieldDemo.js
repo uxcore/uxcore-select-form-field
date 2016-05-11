@@ -47,6 +47,14 @@ class Demo extends React.Component {
         })
     }
 
+    handleParentLeave() {
+        alert('parent leave');
+    }
+
+    handleChildLeave() {
+        alert('child leave')
+    }
+
     renderOptions() {
         let me = this;
         let arr = [];

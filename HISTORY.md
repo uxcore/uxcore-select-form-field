@@ -1,3 +1,8 @@
+
+## 0.1.7
+
+* `FIX` fix view mode bug in only jsxdata mode.
+
 ## 0.1.6
 
 * `NEW` prop `jsxdata` support array like [{value: xxx, text: xxx}]
