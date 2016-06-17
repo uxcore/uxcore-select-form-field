@@ -1,4 +1,8 @@
 
+## 0.1.8
+
+* `FIX` fix server render bug
+
 ## 0.1.7
 
 * `FIX` fix view mode bug in only jsxdata mode.

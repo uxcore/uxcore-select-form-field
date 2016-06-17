@@ -1,14 +1,15 @@
 /**
  * Created by xy on 15/4/13.
  */
-let FormField = require('uxcore-form-field');
-let Constants = require("uxcore-const");
-let Select = require('uxcore-select2');
-let assign = require('object-assign');
-let Validator = require('uxcore-validator');
-let {isObject, isArray} = Validator;
-let {Option} = Select;
-let selectOptions = ['onSelect', 'onDeselect', 'getPopupContainer', 'multiple', 'filterOption', 'allowClear', 'combobox', 'searchPlaceholder', 'tags', 'disabled', 'showSearch', 'placeholder', 'optionLabelProp', 'maxTagTextLength', 'dropdownMatchSelectWidth', 'dropdownClassName', 'notFoundContent'];
+const React = require('react');
+const FormField = require('uxcore-form-field');
+const Constants = require("uxcore-const");
+const Select = require('uxcore-select2');
+const assign = require('object-assign');
+const Validator = require('uxcore-validator');
+const {isObject, isArray} = Validator;
+const {Option} = Select;
+const selectOptions = ['onSelect', 'onDeselect', 'getPopupContainer', 'multiple', 'filterOption', 'allowClear', 'combobox', 'searchPlaceholder', 'tags', 'disabled', 'showSearch', 'placeholder', 'optionLabelProp', 'maxTagTextLength', 'dropdownMatchSelectWidth', 'dropdownClassName', 'notFoundContent'];
 
 class SelectFormField extends FormField {
     constructor(props) {
