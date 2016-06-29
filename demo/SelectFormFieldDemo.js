@@ -20,24 +20,34 @@ class Demo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // jsxdata: {
-            //     "bj": "北",
-            //     "nj": "南",
-            //     "dj": "东",
-            //     "xj": "西"
-            // },
-            jsxdata: [
-                {
-                    value: "bj",
-                    text: "北京"
-                },
-                {
-                    value: "nj",
-                    text: "南京" 
-                }
-            ],
+            jsxdata: {
+                "bj": "北",
+                "nj": "南",
+                "dj": "东",
+                "xj": "西"
+            },
+            // jsxdata: [
+            //     {
+            //         value: "bj",
+            //         text: "北京"
+            //     },
+            //     {
+            //         value: "nj",
+            //         text: "南京" 
+            //     }
+            // ],
             mode: Constants.MODE.EDIT
         }
+    }
+
+    handleOptionChange() {
+        const me = this;
+        me.setState({
+            jsxdata: {
+                "bj": "北",
+                "nj": "南",
+            }
+        })
     }
 
     handleModeChange() {
@@ -111,6 +121,7 @@ class Demo extends React.Component {
 
                 </Form>
                 <Button onClick={me.handleModeChange.bind(me)}>切换模式</Button>
+                <Button onClick={me.handleOptionChange.bind(me)}>更改选项</Button>
             </div>
         );
     }

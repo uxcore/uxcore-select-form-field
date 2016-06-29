@@ -1,4 +1,8 @@
 
+## 0.1.9
+
+* `CHANGED` pass `labelInValue` to Select 
+
 ## 0.1.8
 
 * `FIX` fix server render bug
