@@ -23,7 +23,7 @@ class SelectFormField extends FormField {
     componentWillReceiveProps(nextProps) {
         let me = this;
         if (!me._isEqual(nextProps.value, me.props.value)) {
-            me.handleDataChange(me._processValue(nextProps.value), true);
+            me.handleDataChange(me._processValue(nextProps.value), true, true);
         }
         if (!me._isEqual(nextProps.jsxdata, me.props.jsxdata)) {
             me.setState({

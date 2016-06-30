@@ -1,4 +1,9 @@
 
+
+## 0.1.10
+
+* `CHANGED` componentWillReceiveProps do not trigger form onChange
+
 ## 0.1.9
 
 * `CHANGED` pass `labelInValue` to Select 
