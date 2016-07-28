@@ -1,5 +1,9 @@
 
 
+## 0.2.0
+
+* `CHANGED` update dependecy `uxcore-select2` to ~0.3.0
+
 ## 0.1.10
 
 * `CHANGED` componentWillReceiveProps do not trigger form onChange
