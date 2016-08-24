@@ -2,6 +2,7 @@
 ## 0.2.1
 
 * `CHANGED` jQuery free
+* `CHANGED` abort search request if next request is called.
 * `NEW` add new prop `searchDelay` to debounce search action.
 
 ## 0.2.0
