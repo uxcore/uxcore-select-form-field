@@ -1,4 +1,8 @@
 
+## 0.2.1
+
+* `CHANGED` jQuery free
+* `NEW` add new prop `searchDelay` to debounce search action.
 
 ## 0.2.0
 

@@ -117,11 +117,16 @@ class SelectFormField extends FormField {
   }
   handleSearch(value) {
     const me = this;
-    if (me.props.jsxfetchUrl) {
-      me.fetchData(value);
-    } else if (me.props.onSearch) {
-      me.props.onSearch(value);
+    if (me.searchTimer) {
+      clearTimeout(me.searchTimer);
     }
+    me.searchTimer = setTimeout(() => {
+      if (me.props.jsxfetchUrl) {
+        me.fetchData(value);
+      } else if (me.props.onSearch) {
+        me.props.onSearch(value);
+      }
+    }, me.props.searchDelay);
   }
 
   /**
@@ -316,6 +321,7 @@ SelectFormField.propTypes = assign({}, FormField.propTypes, {
     React.PropTypes.object,
     React.PropTypes.array,
   ]),
+  searchDelay: React.PropTypes.number,
   beforeFetch: React.PropTypes.func,
   afterFetch: React.PropTypes.func,
   jsxshowSearch: React.PropTypes.bool,
@@ -332,6 +338,7 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   jsxplaceholder: '请下拉选择',
   jsxcombobox: false,
   jsxdata: {},
+  searchDelay: 100,
   beforeFetch: (obj) => obj,
   afterFetch: (obj) => obj,
   fitResponse: (response) =>
