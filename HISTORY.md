@@ -1,4 +1,8 @@
 
+## 0.2.2
+
+* `CHANGED` replace method name generateOptionsFromData with _generateOptionsFromData to fix SearchFormField bug
+
 ## 0.2.1
 
 * `CHANGED` jQuery free

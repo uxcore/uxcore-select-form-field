@@ -159,7 +159,7 @@ class SelectFormField extends FormField {
     });
     return obj;
   }
-  generateOptionsFromData() {
+  _generateOptionsFromData() {
     const me = this;
     const values = me.state.data;
     const children = me.props.children;
@@ -278,7 +278,7 @@ class SelectFormField extends FormField {
         options.filterOption = false;
       }
       arr.push(<Select {...options}>
-        {me.generateOptionsFromData()}
+        {me._generateOptionsFromData()}
       </Select>);
     } else if (mode === Constants.MODE.VIEW) {
       let str = '';
