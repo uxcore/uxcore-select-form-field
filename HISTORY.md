@@ -1,4 +1,8 @@
 
+## 0.2.3
+
+* `FIXED` me.props.handleDataChange is not silent when value change. 
+
 ## 0.2.2
 
 * `CHANGED` replace method name generateOptionsFromData with _generateOptionsFromData to fix SearchFormField bug

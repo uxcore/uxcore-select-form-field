@@ -59,7 +59,7 @@ class SelectFormField extends FormField {
     me.hasDeprecatedProps();
   }
 
-  handleDataChange(value, fromReset) {
+  handleDataChange(value, fromReset, silence) {
     const me = this;
     me.setState({
       value,
@@ -75,10 +75,12 @@ class SelectFormField extends FormField {
       if (!fromReset) {
         pass = me.doValidate();
       }
-      me.props.handleDataChange(me, {
-        value,
-        pass,
-      });
+      if (me.props.handleChange) {
+        me.props.handleDataChange(me, {
+          value,
+          pass,
+        }, silence);
+      }
     });
   }
 
