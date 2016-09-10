@@ -1,5 +1,5 @@
 
-## 0.2.3
+## 0.2.4
 
 * `FIXED` me.props.handleDataChange is not silent when value change. 
 

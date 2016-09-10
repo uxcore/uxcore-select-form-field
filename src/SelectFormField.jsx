@@ -75,7 +75,7 @@ class SelectFormField extends FormField {
       if (!fromReset) {
         pass = me.doValidate();
       }
-      if (me.props.handleChange) {
+      if (me.props.handleDataChange) {
         me.props.handleDataChange(me, {
           value,
           pass,
