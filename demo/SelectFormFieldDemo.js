@@ -7,6 +7,7 @@
  */
 
 let classnames = require('classnames');
+const React = require('react');
 
 let SelectFormField = require('../src');
 let {Option} = SelectFormField;
@@ -85,14 +86,16 @@ class Demo extends React.Component {
         let me = this;
         return (
             <div>
-                <Form jsxmode={me.state.mode}>
+                <Form jsxmode={me.state.mode} jsxvalues={{city:'bj'}}>
                     <SelectFormField
+                         jsxstyle={{width:'800px'}}
                          jsxlabel="单选"
                          jsxname="city"
                          allowClear={true}
                          jsxrules={{validator: Validators.isNotEmpty, errMsg: "不能为空"}}
                          disabled={false}
-                         jsxdata={me.state.jsxdata}/>
+                         jsxdata={me.state.jsxdata}
+                         onSearch={(value)=>{debugger}}/>
                     <SelectFormField
                          jsxlabel="单选2"
                          jsxname="city2"
