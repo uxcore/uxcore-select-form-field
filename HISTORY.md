@@ -1,4 +1,8 @@
 
+## 0.3.0
+
+* `CHANGED` update `uxcore-select2` to ~0.4.0
+
 ## 0.2.4
 
 * `FIXED` me.props.handleDataChange is not silent when value change. 
