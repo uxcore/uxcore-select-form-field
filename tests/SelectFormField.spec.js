@@ -39,34 +39,34 @@ describe('SelectFormField', () => {
       );
   });
 
-  it('afterFetch', (done) => {
-      const wrapper = mount(
-        <Form>
-          <SelectFormField 
-            jsxshowSearch={true} 
-            jsxname="test" 
-            jsxlabel="test"
-            jsxfetchUrl="http://suggest.taobao.com/sug"
-            dataType="jsonp"
-            beforeFetch={(data) => {
-              if (data.q == undefined) {
-                  data.q = "a";
-              }
-              return data;
-            }}
-            afterFetch={(obj) => {
-              let data = {};
-              obj.result.forEach((item, index) => {
-                  data[item[1]] = item[0];
-              });
+  // it('afterFetch', (done) => {
+  //     const wrapper = mount(
+  //       <Form>
+  //         <SelectFormField 
+  //           jsxshowSearch={true} 
+  //           jsxname="test" 
+  //           jsxlabel="test"
+  //           jsxfetchUrl="http://suggest.taobao.com/sug"
+  //           dataType="jsonp"
+  //           beforeFetch={(data) => {
+  //             if (data.q == undefined) {
+  //                 data.q = "a";
+  //             }
+  //             return data;
+  //           }}
+  //           afterFetch={(obj) => {
+  //             let data = {};
+  //             obj.result.forEach((item, index) => {
+  //                 data[item[1]] = item[0];
+  //             });
 
-              expect(data).to.not.be.empty();
-              done();
-            }} 
-          />
-        </Form>
-      );
-  });
+  //             expect(data).to.not.be.empty();
+  //             done();
+  //           }} 
+  //         />
+  //       </Form>
+  //     );
+  // });
     
   it('jsxdata', (done) => {
       const data = {
