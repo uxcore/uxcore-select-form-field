@@ -1,4 +1,8 @@
 
+## 0.3.1
+
+* `CHANGED` show key if label is not found in view mode
+
 ## 0.3.0
 
 * `CHANGED` update `uxcore-select2` to ~0.4.0

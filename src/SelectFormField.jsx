@@ -11,20 +11,24 @@ const isEqual = require('lodash/isEqual');
 const NattyFetch = require('natty-fetch/dist/natty-fetch.pc');
 const Promise = require('lie');
 
+const util = require('./util');
+
+const { processData, transferDataToObj, getValuePropValue } = util;
+
 const { isArray } = Validator;
 const { Option } = Select;
 const selectOptions = ['onSelect', 'onDeselect', 'getPopupContainer',
   'multiple', 'filterOption', 'allowClear', 'combobox', 'searchPlaceholder',
   'tags', 'disabled', 'showSearch', 'placeholder', 'optionLabelProp',
   'maxTagTextLength', 'dropdownMatchSelectWidth', 'dropdownClassName',
-  'notFoundContent', 'labelInValue'];
+  'notFoundContent', 'labelInValue', 'defaultActiveFirstOption'];
 
 class SelectFormField extends FormField {
   constructor(props) {
     super(props);
     const me = this;
     assign(me.state, {
-      data: me.processData(props.jsxdata),
+      data: processData(props.jsxdata),
     });
   }
 
@@ -35,7 +39,7 @@ class SelectFormField extends FormField {
     }
     if (!isEqual(nextProps.jsxdata, me.props.jsxdata)) {
       me.setState({
-        data: me.processData(nextProps.jsxdata),
+        data: processData(nextProps.jsxdata),
       });
     }
   }
@@ -101,9 +105,9 @@ class SelectFormField extends FormField {
       Promise,
     });
     me.fetch().then((content) => {
-      let fetchData = me.processData(me.props.afterFetch(content));
+      let fetchData = processData(me.props.afterFetch(content));
       if (me.props.jsxdata) {
-        fetchData = me.processData(me.props.jsxdata).concat(fetchData);
+        fetchData = processData(me.props.jsxdata).concat(fetchData);
       }
       me.setState({
         data: fetchData,
@@ -117,6 +121,7 @@ class SelectFormField extends FormField {
     const me = this;
     me.handleDataChange(value, false, label);
   }
+
   handleSearch(value) {
     const me = this;
     if (me.searchTimer) {
@@ -131,36 +136,6 @@ class SelectFormField extends FormField {
     }, me.props.searchDelay);
   }
 
-  /**
-   * jsxdata can be one of two types: hash map or array
-   * hash map is like {value: text}
-   * array is like [{value: xxx, text: xxx}]
-   */
-
-  processData(data) {
-    let values = [];
-    if (typeof data === 'object' && !(data instanceof Array)) {
-      const keys = Object.keys(data);
-      values = keys.map((key) =>
-        ({
-          value: key,
-          text: data[key],
-        })
-      );
-    } else {
-      values = data;
-    }
-    return values;
-  }
-
-  transferDataToObj(data) {
-    const obj = {};
-    data.forEach((item) => {
-      const key = (item.value === '' ? '__all__' : item.value);
-      obj[key] = item.text;
-    });
-    return obj;
-  }
   _generateOptionsFromData() {
     const me = this;
     const values = me.state.data;
@@ -171,7 +146,7 @@ class SelectFormField extends FormField {
         return children;
       }
     }
-    const arr = values.map((item) =>
+    const arr = values.map(item =>
       <Option key={item.value} title={item.text}>
         {item.text}
       </Option>
@@ -179,6 +154,10 @@ class SelectFormField extends FormField {
     return arr;
   }
 
+  /**
+   * transfer 'a' to { key: 'a' }
+   * transfer ['a'] to [{ key: 'a' }]
+   */
   processValue(value) {
     const me = this;
     const newValue = value || me.state.value;
@@ -210,28 +189,18 @@ class SelectFormField extends FormField {
     return me.props.jsxprefixCls;
   }
 
-  getValuePropValue(child) {
-    let key = '';
-    if ('value' in child.props) {
-      key = child.props.value;
-    } else {
-      key = child.key;
-    }
-    return key;
-  }
-
   hasDeprecatedProps() {
     const arr = ['jsxmultiple', 'jsxallowClear', 'jsxcombobox',
       'jsxsearchPlaceholder', 'jsxtags', 'jsxdisabled', 'jsxshowSearch',
       'jsxplaceholder'];
     const me = this;
     const keys = Object.keys(me.props);
-    const hasDeprecated = keys.some((item) => arr.indexOf(item) !== -1);
+    const hasDeprecated = keys.some(item => arr.indexOf(item) !== -1);
     if (hasDeprecated) {
       console.warn(`SelectFormField: props same as 
-        uxcore-select2 can be passed without prefix \'jsx\' now (exclude style). 
+        uxcore-select2 can be passed without prefix 'jsx' now (exclude style). 
         we will remove the support of the props mentioned 
-        above with prefix \'jsx\' at uxcore-form@1.3.0 .`);
+        above with prefix 'jsx' at uxcore-form@1.3.0 .`);
     }
   }
 
@@ -279,9 +248,12 @@ class SelectFormField extends FormField {
       if (me.props.jsxfetchUrl) {
         options.filterOption = false;
       }
+      /* eslint-disable no-underscore-dangle */
+      /* used in SearchFormField */
       arr.push(<Select {...options}>
         {me._generateOptionsFromData()}
       </Select>);
+      /* eslint-enable no-underscore-dangle */
     } else if (mode === Constants.MODE.VIEW) {
       let str = '';
       if (me.state.value) {
@@ -289,21 +261,25 @@ class SelectFormField extends FormField {
         const values = !isArray(value) ? [value] : value;
         // labelInValue mode
         if (me.props.jsxfetchUrl || me.props.onSearch || me.props.labelInValue) {
-          str = values.map((item) => item.label).join(' ');
+          str = values.map(item => (item.label || item.key)).join(' ');
         } else if (me.props.children) {
           // <Option> mode
           if (me.props.children) {
             me.props.children.forEach((child) => {
-              const valuePropValue = me.getValuePropValue(child);
+              const valuePropValue = getValuePropValue(child);
               if (values.indexOf(valuePropValue) !== -1) {
                 str += `${child.props[me.props.optionLabelProp]} `;
               }
             });
+            if (str === '') {
+              str = values.join(' ');
+            }
           }
         } else {
           // only jsxdata
           values.forEach((item) => {
-            str += `${me.transferDataToObj(me.state.data)[item === '' ? '__all__' : item]} `;
+            const label = transferDataToObj(me.state.data)[item === '' ? '__all__' : item];
+            str += `${label || item} `;
           });
         }
       }
@@ -341,9 +317,9 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   jsxcombobox: false,
   jsxdata: {},
   searchDelay: 100,
-  beforeFetch: (obj) => obj,
-  afterFetch: (obj) => obj,
-  fitResponse: (response) =>
+  beforeFetch: obj => obj,
+  afterFetch: obj => obj,
+  fitResponse: response =>
   ({
     content: response.content || response,
     success: response.success === undefined ? true : response.success,
