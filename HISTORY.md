@@ -1,4 +1,8 @@
 
+## 0.3.2
+
+* `CHANGED` update `uxcore-form-field` to ~0.2.0
+
 ## 0.3.1
 
 * `CHANGED` show key if label is not found in view mode
