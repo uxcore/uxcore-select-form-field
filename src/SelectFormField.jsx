@@ -63,6 +63,27 @@ class SelectFormField extends FormField {
     me.hasDeprecatedProps();
   }
 
+  /**
+   * select inner method is used, not very reliable
+   */
+
+  resetSelect() {
+    const me = this;
+    const { multiple, closeOnSelect } = me.props;
+    if (multiple && closeOnSelect) {
+      if (typeof me.select.setInputValue === 'function') {
+        me.select.setInputValue('');
+      } else {
+        console.warn('select.setInputValue is invalid');
+      }
+      if (typeof me.select.setOpenState === 'function') {
+        me.select.setOpenState(false, false);
+      } else {
+        console.warn('select.setOpenState is invalid');
+      }
+    }
+  }
+
   handleDataChange(value, fromReset, silence) {
     const me = this;
     me.setState({
@@ -211,7 +232,7 @@ class SelectFormField extends FormField {
 
     if (mode === Constants.MODE.EDIT) {
       const options = {
-        ref: 'el',
+        ref: (c) => { this.select = c; },
         key: 'select',
         optionLabelProp: me.props.optionLabelProp,
         style: me.props.jsxstyle,
@@ -226,6 +247,12 @@ class SelectFormField extends FormField {
         placeholder: me.props.jsxplaceholder,
         onChange: me.handleChange.bind(me),
         onSearch: me.handleSearch.bind(me),
+        onSelect: (...args) => {
+          this.resetSelect();
+          if (this.props.onSelect) {
+            this.props.onSelect(...args);
+          }
+        },
       };
 
 

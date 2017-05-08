@@ -105,6 +105,8 @@ class Demo extends React.Component {
           </SelectFormField>
           <SelectFormField
             jsxlabel="多选模式"
+            closeOnSelect
+            onSelect={(...args) => { console.log(...args); }}
             jsxname="goods2"
             multiple
             jsxfetchUrl="http://suggest.taobao.com/sug"
