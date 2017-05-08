@@ -17,7 +17,7 @@ const { processData, transferDataToObj, getValuePropValue } = util;
 
 const { isArray } = Validator;
 const { Option } = Select;
-const selectOptions = ['onSelect', 'onDeselect', 'getPopupContainer',
+const selectOptions = ['onDeselect', 'getPopupContainer',
   'multiple', 'filterOption', 'allowClear', 'combobox', 'searchPlaceholder',
   'tags', 'disabled', 'showSearch', 'placeholder', 'optionLabelProp',
   'maxTagTextLength', 'dropdownMatchSelectWidth', 'dropdownClassName',
