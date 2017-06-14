@@ -1,3 +1,6 @@
+## 0.3.4
+
+* `CHANGED` fetchData when url is changed
 
 ## 0.3.3
 
