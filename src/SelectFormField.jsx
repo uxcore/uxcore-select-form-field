@@ -44,7 +44,7 @@ class SelectFormField extends FormField {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const me = this;
     if (me.props.jsxfetchUrl) {
       me.fetchData();
@@ -61,6 +61,13 @@ class SelectFormField extends FormField {
       }, true);
     }
     me.hasDeprecatedProps();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { jsxfetchUrl } = this.props;
+    if (jsxfetchUrl && prevProps.jsxfetchUrl !== jsxfetchUrl) {
+      this.fetchData();
+    }
   }
 
   /**
