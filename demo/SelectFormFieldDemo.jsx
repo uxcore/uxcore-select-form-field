@@ -27,17 +27,8 @@ class Demo extends React.Component {
         dj: '东',
         xj: '西',
       },
-      // jsxdata: [
-      //     {
-      //         value: "bj",
-      //         text: "北京"
-      //     },
-      //     {
-      //         value: "nj",
-      //         text: "南京"
-      //     }
-      // ],
       mode: Constants.MODE.EDIT,
+      value: 'bj',
     };
   }
 
@@ -66,6 +57,12 @@ class Demo extends React.Component {
     alert('child leave');
   }
 
+  handleClear() {
+    this.setState({
+      value: null,
+    });
+  }
+
   renderOptions() {
     const me = this;
     let arr = [];
@@ -85,7 +82,7 @@ class Demo extends React.Component {
     const me = this;
     return (
       <div>
-        <Form jsxmode={me.state.mode} jsxvalues={{ city: 'bj', city2: '*' }}>
+        <Form jsxmode={me.state.mode} jsxvalues={{ city: this.state.value, city2: '*' }}>
           <SelectFormField
             jsxstyle={{ width: '800px' }}
             jsxlabel="单选"
@@ -129,6 +126,7 @@ class Demo extends React.Component {
         </Form>
         <Button onClick={me.handleModeChange.bind(me)}>切换模式</Button>
         <Button onClick={me.handleOptionChange.bind(me)}>更改选项</Button>
+        <Button onClick={() => { me.handleClear(); }}>清空值</Button>
       </div>
     );
   }

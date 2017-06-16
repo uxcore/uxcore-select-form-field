@@ -1,3 +1,7 @@
+## 0.3.6
+
+* `FIXED` value cannot be reset by null
+
 ## 0.3.4
 
 * `CHANGED` fetchData when url is changed

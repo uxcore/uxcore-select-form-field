@@ -17,26 +17,6 @@ describe('SelectFormField', () => {
     done();
   });
 
-  it('beforeFetch', (done) => {
-    const wrapper = mount(
-      <Form>
-        <SelectFormField
-          jsxshowSearch
-          jsxname="test"
-          jsxlabel="test"
-          jsxfetchUrl="http://eternalsky.me:8122/file/getGridJson.jsonp"
-          beforeFetch={(data) => {
-            if (data.q === undefined) {
-              data.q = 'a';
-            }
-            expect(JSON.stringify(data)).to.be(JSON.stringify({ q: 'a' }));
-            done();
-          }}
-        />
-      </Form>
-      );
-  });
-
   it('jsxdata', (done) => {
     const data = {
       bj: '北京',
@@ -66,7 +46,7 @@ describe('SelectFormField', () => {
           jsxlabel="test"
           jsxfetchUrl="http://eternalsky.me:8122/file/getGridJson.jsonp"
           searchDelay={100}
-          onSelect={(data) => {
+          onSelect={() => {
             testData = 'test2';
           }}
         />
@@ -86,25 +66,23 @@ describe('SelectFormField', () => {
     };
 
     const wrapper = mount(
-      <Form jsxonChange={(value, name) => {
-        expect(value.test).to.be.equal('bj');
-        expect(name).to.be.equal('test');
-      }}
+      <Form
+        jsxonChange={(value, name) => {
+          expect(value.test).to.be.equal('bj');
+          expect(name).to.be.equal('test');
+        }}
       >
         <SelectFormField
           jsxshowSearch
           jsxname="test"
           jsxlabel="test"
           jsxdata={data}
-          handleDataChange={(value, fromReset, label) => {}}
-          onChange={(value, label) => {}}
         />
       </Form>
     );
     wrapper.find('SelectFormField').find('.kuma-select2-arrow').simulate('click');
     const dropdownWrapper = mount(wrapper.find('SelectFormField').find('Trigger').node.getComponent());
     dropdownWrapper.find('li').at(0).simulate('click');
-    wrapper.find('SelectFormField').props().onChange('bj', '北京');
     done();
   });
 

@@ -188,7 +188,10 @@ class SelectFormField extends FormField {
    */
   processValue(value) {
     const me = this;
-    const newValue = value || me.state.value;
+    let newValue = value;
+    if (value === undefined) {
+      newValue = me.state.value;
+    }
     if (!me.props.jsxfetchUrl && !me.props.onSearch) {
       return newValue;
     }
