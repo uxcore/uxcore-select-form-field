@@ -49,10 +49,6 @@ class SelectFormField extends FormField {
     if (me.props.jsxfetchUrl) {
       me.fetchData();
     }
-  }
-
-  componentDidMount() {
-    const me = this;
     if (!me.props.standalone) {
       me.props.attachFormField(me);
       me.props.handleDataChange(me, {

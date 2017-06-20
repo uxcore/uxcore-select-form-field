@@ -1,3 +1,7 @@
+## 0.3.7
+
+* `FIXED` fetchData when didMount fails to work
+
 ## 0.3.6
 
 * `FIXED` value cannot be reset by null
