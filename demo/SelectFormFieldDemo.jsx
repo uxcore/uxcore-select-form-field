@@ -92,6 +92,8 @@ class Demo extends React.Component {
             disabled={false}
             jsxdata={me.state.jsxdata}
             onSearch={(value) => { }}
+            onFocus={() => { console.log('focus'); }}
+            onBlur={() => { console.log('blur'); }}
           />
           <SelectFormField
             jsxlabel="单选2"

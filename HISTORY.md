@@ -1,3 +1,7 @@
+## 0.3.8
+
+* `CHANGED` pass prop `onFocus`, `onBlur` to Select
+
 ## 0.3.7
 
 * `FIXED` fetchData when didMount fails to work

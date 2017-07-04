@@ -21,7 +21,7 @@ const selectOptions = ['onDeselect', 'getPopupContainer',
   'multiple', 'filterOption', 'allowClear', 'combobox', 'searchPlaceholder',
   'tags', 'disabled', 'showSearch', 'placeholder', 'optionLabelProp',
   'maxTagTextLength', 'dropdownMatchSelectWidth', 'dropdownClassName',
-  'notFoundContent', 'labelInValue', 'defaultActiveFirstOption'];
+  'notFoundContent', 'labelInValue', 'defaultActiveFirstOption', 'onFocus', 'onBlur'];
 
 class SelectFormField extends FormField {
   constructor(props) {
