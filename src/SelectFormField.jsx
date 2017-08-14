@@ -46,7 +46,7 @@ class SelectFormField extends FormField {
 
   componentDidMount() {
     const me = this;
-    if (me.props.jsxfetchUrl) {
+    if (me.props.jsxfetchUrl && me.props.fetchDataOnMount) {
       me.fetchData();
     }
     if (!me.props.standalone) {
@@ -342,6 +342,7 @@ SelectFormField.propTypes = assign({}, FormField.propTypes, {
   jsxsearchPlaceholder: React.PropTypes.string,
   optionFilterProp: React.PropTypes.string,
   dataType: React.PropTypes.string,
+  fetchDataOnMount: React.PropTypes.bool,
 });
 
 SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
@@ -364,6 +365,7 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   jsxsearchPlaceholder: '',
   optionFilterProp: 'children',
   optionLabelProp: 'children',
+  fetchDataOnMount: true,
 });
 
 module.exports = SelectFormField;
