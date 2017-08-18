@@ -87,31 +87,6 @@ class SelectFormField extends FormField {
     }
   }
 
-  handleDataChange(value, fromReset, silence) {
-    const me = this;
-    me.setState({
-      value,
-      formatValue: me.formatValue(value),
-      error: fromReset ? false : me.state.error,
-      /*
-       * why set state fromReset? some field like editor cannot be reset in the common way
-       * so set this state to tell the field that you need to reset by yourself.
-       */
-      fromReset,
-    }, () => {
-      let pass = true;
-      if (!fromReset) {
-        pass = me.doValidate();
-      }
-      if (me.props.handleDataChange) {
-        me.props.handleDataChange(me, {
-          value,
-          pass,
-        }, silence);
-      }
-    });
-  }
-
   fetchData(value) {
     const me = this;
     if (me.fetch) {

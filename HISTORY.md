@@ -1,3 +1,7 @@
+## 0.3.10
+
+* `CHANGED` use `FormField` original `handleDataChange`
+
 ## 0.3.8
 
 * `CHANGED` pass prop `onFocus`, `onBlur` to Select
