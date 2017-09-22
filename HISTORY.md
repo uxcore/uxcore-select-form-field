@@ -1,3 +1,7 @@
+## 0.3.11
+
+* `CHANGED` pass prop `size`
+
 ## 0.3.10
 
 * `CHANGED` use `FormField` original `handleDataChange`

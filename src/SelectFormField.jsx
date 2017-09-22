@@ -232,6 +232,7 @@ class SelectFormField extends FormField {
             this.props.onSelect(...args);
           }
         },
+        size: me.getSize(),
       };
 
 

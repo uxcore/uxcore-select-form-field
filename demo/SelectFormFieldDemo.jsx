@@ -88,6 +88,7 @@ class Demo extends React.Component {
             jsxlabel="单选"
             jsxname="city"
             allowClear
+            size="small"
             jsxrules={{ validator: Validators.isNotEmpty, errMsg: '不能为空' }}
             disabled={false}
             jsxdata={me.state.jsxdata}
