@@ -1,12 +1,15 @@
 import expect from 'expect.js';
 import React from 'react';
-import { mount } from 'enzyme';
+import Enzyme, { mount } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-15';
 import Form from 'uxcore-form/build/Form';
 import SelectFormField from '../src';
 
 const { Constants } = Form;
 
 const { Option } = SelectFormField;
+
+Enzyme.configure({ adapter: new Adapter() });
 
 describe('SelectFormField', () => {
   it('jsxshowSearch', (done) => {
@@ -81,7 +84,7 @@ describe('SelectFormField', () => {
       </Form>
     );
     wrapper.find('SelectFormField').find('.kuma-select2-arrow').simulate('click');
-    const dropdownWrapper = mount(wrapper.find('SelectFormField').find('Trigger').node.getComponent());
+    const dropdownWrapper = mount(wrapper.find('SelectFormField').find('Trigger').instance().getComponent());
     dropdownWrapper.find('li').at(0).simulate('click');
     done();
   });

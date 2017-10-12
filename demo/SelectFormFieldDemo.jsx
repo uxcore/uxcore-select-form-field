@@ -6,15 +6,16 @@
  * All rights reserved.
  */
 
-const classnames = require('classnames');
-const React = require('react');
+import classnames from 'classnames';
 
-const SelectFormField = require('../src');
+import React from 'react';
+import Form from 'uxcore-form';
+import Constants from 'uxcore-const';
+import Validators from 'uxcore-validator';
+import Button from 'uxcore-button';
+import SelectFormField from '../src/SelectFormField';
+
 const { Option } = SelectFormField;
-const Form = require('uxcore-form/build/Form');
-const Constants = require('uxcore-const');
-const Validators = require('uxcore-validator');
-const Button = require('uxcore-button');
 
 class Demo extends React.Component {
 
@@ -71,9 +72,11 @@ class Demo extends React.Component {
         return <Option key={item.value}>{item.text}</Option>;
       });
     } else {
-      for (const key in me.state.jsxdata) {
-        arr.push(<Option key={key}>{me.state.jsxdata[key]}</Option>);
-      }
+      const key = Object.keys(me.state.jsxdata);
+      key.map((v) => {
+        arr.push(<Option key={v}>{me.state.jsxdata[v]}</Option>);
+        return false;
+      });
     }
     return arr;
   }
@@ -112,10 +115,11 @@ class Demo extends React.Component {
             jsxfetchUrl="http://suggest.taobao.com/sug"
             dataType="jsonp"
             beforeFetch={function (data) {
-              if (data.q === undefined) {
-                data.q = 'a';
+              const datas = data;
+              if (datas.q === undefined) {
+                datas.q = 'a';
               }
-              return data;
+              return datas;
             }}
             afterFetch={(obj) => {
               const data = {};
@@ -135,4 +139,4 @@ class Demo extends React.Component {
   }
 }
 
-module.exports = Demo;
+export default Demo;

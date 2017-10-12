@@ -6,4 +6,4 @@
  * All rights reserved.
  */
 
-module.exports = require('./SelectFormField');
+export default from './SelectFormField';
