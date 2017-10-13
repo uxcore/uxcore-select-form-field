@@ -6,7 +6,6 @@
  * All rights reserved.
  */
 
-import classnames from 'classnames';
 
 import React from 'react';
 import Form from 'uxcore-form';
@@ -18,7 +17,6 @@ import SelectFormField from '../src/SelectFormField';
 const { Option } = SelectFormField;
 
 class Demo extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -68,9 +66,7 @@ class Demo extends React.Component {
     const me = this;
     let arr = [];
     if (me.state.jsxdata instanceof Array) {
-      arr = me.state.jsxdata.map((item) => {
-        return <Option key={item.value}>{item.text}</Option>;
-      });
+      arr = me.state.jsxdata.map(item => (<Option key={item.value}>{item.text}</Option>));
     } else {
       const key = Object.keys(me.state.jsxdata);
       key.map((v) => {
