@@ -69,9 +69,8 @@ class Demo extends React.Component {
       arr = me.state.jsxdata.map(item => (<Option key={item.value}>{item.text}</Option>));
     } else {
       const key = Object.keys(me.state.jsxdata);
-      key.map((v) => {
+      key.forEach((v) => {
         arr.push(<Option key={v}>{me.state.jsxdata[v]}</Option>);
-        return false;
       });
     }
     return arr;
@@ -111,11 +110,11 @@ class Demo extends React.Component {
             jsxfetchUrl="http://suggest.taobao.com/sug"
             dataType="jsonp"
             beforeFetch={function (data) {
-              const datas = data;
-              if (datas.q === undefined) {
-                datas.q = 'a';
+              const newData = { ...data };
+              if (newData.q === undefined) {
+                newData.q = 'a';
               }
-              return datas;
+              return newData;
             }}
             afterFetch={(obj) => {
               const data = {};
