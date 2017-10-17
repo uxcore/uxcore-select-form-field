@@ -1,3 +1,8 @@
+
+## 0.3.12
+
+* `CHANGED` fit React@15
+
 ## 0.3.11
 
 * `CHANGED` pass prop `size`
