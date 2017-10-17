@@ -6,18 +6,17 @@
  * All rights reserved.
  */
 
-const classnames = require('classnames');
-const React = require('react');
 
-const SelectFormField = require('../src');
+import React from 'react';
+import Form from 'uxcore-form';
+import Constants from 'uxcore-const';
+import Validators from 'uxcore-validator';
+import Button from 'uxcore-button';
+import SelectFormField from '../src/SelectFormField';
+
 const { Option } = SelectFormField;
-const Form = require('uxcore-form/build/Form');
-const Constants = require('uxcore-const');
-const Validators = require('uxcore-validator');
-const Button = require('uxcore-button');
 
 class Demo extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -67,13 +66,12 @@ class Demo extends React.Component {
     const me = this;
     let arr = [];
     if (me.state.jsxdata instanceof Array) {
-      arr = me.state.jsxdata.map((item) => {
-        return <Option key={item.value}>{item.text}</Option>;
-      });
+      arr = me.state.jsxdata.map(item => (<Option key={item.value}>{item.text}</Option>));
     } else {
-      for (const key in me.state.jsxdata) {
-        arr.push(<Option key={key}>{me.state.jsxdata[key]}</Option>);
-      }
+      const key = Object.keys(me.state.jsxdata);
+      key.forEach((v) => {
+        arr.push(<Option key={v}>{me.state.jsxdata[v]}</Option>);
+      });
     }
     return arr;
   }
@@ -112,10 +110,11 @@ class Demo extends React.Component {
             jsxfetchUrl="http://suggest.taobao.com/sug"
             dataType="jsonp"
             beforeFetch={function (data) {
-              if (data.q === undefined) {
-                data.q = 'a';
+              const newData = { ...data };
+              if (newData.q === undefined) {
+                newData.q = 'a';
               }
-              return data;
+              return newData;
             }}
             afterFetch={(obj) => {
               const data = {};
@@ -135,4 +134,4 @@ class Demo extends React.Component {
   }
 }
 
-module.exports = Demo;
+export default Demo;

@@ -1,17 +1,17 @@
 /**
  * Created by xy on 15/4/13.
  */
-const React = require('react');
-const FormField = require('uxcore-form-field');
-const Constants = require('uxcore-const');
-const Select = require('uxcore-select2');
-const assign = require('object-assign');
-const Validator = require('uxcore-validator');
-const isEqual = require('lodash/isEqual');
-const NattyFetch = require('natty-fetch/dist/natty-fetch.pc');
-const Promise = require('lie');
-
-const util = require('./util');
+import React from 'react';
+import PropTypes from 'prop-types';
+import FormField from 'uxcore-form-field';
+import Constants from 'uxcore-const';
+import Select from 'uxcore-select2';
+import assign from 'object-assign';
+import Validator from 'uxcore-validator';
+import isEqual from 'lodash/isEqual';
+import NattyFetch from 'natty-fetch/dist/natty-fetch.pc';
+import Promise from 'lie';
+import util from './util';
 
 const { processData, transferDataToObj, getValuePropValue } = util;
 
@@ -144,9 +144,9 @@ class SelectFormField extends FormField {
       }
     }
     const arr = values.map(item =>
-      <Option key={item.value} title={item.text}>
+      (<Option key={item.value} title={item.text}>
         {item.text}
-      </Option>
+      </Option>),
     );
     return arr;
   }
@@ -299,24 +299,24 @@ class SelectFormField extends FormField {
 SelectFormField.Option = Option;
 SelectFormField.displayName = 'SelectFormField';
 SelectFormField.propTypes = assign({}, FormField.propTypes, {
-  jsxstyle: React.PropTypes.object,
-  jsxplaceholder: React.PropTypes.string,
-  jsxcombobox: React.PropTypes.bool,
-  jsxdata: React.PropTypes.oneOfType([
-    React.PropTypes.object,
-    React.PropTypes.array,
+  jsxstyle: PropTypes.object,
+  jsxplaceholder: PropTypes.string,
+  jsxcombobox: PropTypes.bool,
+  jsxdata: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
   ]),
-  searchDelay: React.PropTypes.number,
-  beforeFetch: React.PropTypes.func,
-  afterFetch: React.PropTypes.func,
-  jsxshowSearch: React.PropTypes.bool,
-  jsxtags: React.PropTypes.bool,
-  jsxmultiple: React.PropTypes.bool,
-  jsxallowClear: React.PropTypes.bool,
-  jsxsearchPlaceholder: React.PropTypes.string,
-  optionFilterProp: React.PropTypes.string,
-  dataType: React.PropTypes.string,
-  fetchDataOnMount: React.PropTypes.bool,
+  searchDelay: PropTypes.number,
+  beforeFetch: PropTypes.func,
+  afterFetch: PropTypes.func,
+  jsxshowSearch: PropTypes.bool,
+  jsxtags: PropTypes.bool,
+  jsxmultiple: PropTypes.bool,
+  jsxallowClear: PropTypes.bool,
+  jsxsearchPlaceholder: PropTypes.string,
+  optionFilterProp: PropTypes.string,
+  dataType: PropTypes.string,
+  fetchDataOnMount: PropTypes.bool,
 });
 
 SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
@@ -328,10 +328,10 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   beforeFetch: obj => obj,
   afterFetch: obj => obj,
   fitResponse: response =>
-  ({
-    content: response.content || response,
-    success: response.success === undefined ? true : response.success,
-  }),
+    ({
+      content: response.content || response,
+      success: response.success === undefined ? true : response.success,
+    }),
   jsxshowSearch: true,
   jsxallowClear: false,
   jsxtags: false,
@@ -342,4 +342,4 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   fetchDataOnMount: true,
 });
 
-module.exports = SelectFormField;
+export default SelectFormField;
