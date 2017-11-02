@@ -248,9 +248,9 @@ class SelectFormField extends FormField {
         options.labelInValue = true;
       }
 
-      if (!me.props.combobox || me.state.fromReset) {
-        options.value = me.processValue() || [];
-      }
+      // if (!me.props.combobox || me.state.fromReset) { // Why?
+      options.value = me.processValue() || [];
+      // }
 
       if (me.props.jsxfetchUrl) {
         options.filterOption = false;

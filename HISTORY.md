@@ -1,3 +1,6 @@
+## 0.3.14
+
+* `CHANGED` remove the weird logic that value can not be set if combobox is true.
 
 ## 0.3.12
 

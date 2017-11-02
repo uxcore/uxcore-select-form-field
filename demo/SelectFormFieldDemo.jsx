@@ -27,7 +27,7 @@ class Demo extends React.Component {
         xj: '西',
       },
       mode: Constants.MODE.EDIT,
-      value: 'bj',
+      value: 'aaa',
     };
   }
 
@@ -87,6 +87,7 @@ class Demo extends React.Component {
             jsxname="city"
             allowClear
             size="small"
+            combobox={true}
             jsxrules={{ validator: Validators.isNotEmpty, errMsg: '不能为空' }}
             disabled={false}
             jsxdata={me.state.jsxdata}
