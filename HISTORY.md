@@ -1,3 +1,7 @@
+## 0.3.15
+
+* `CHANGED` remove deprecated warning
+
 ## 0.3.14
 
 * `CHANGED` remove the weird logic that value can not be set if combobox is true.
