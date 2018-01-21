@@ -1,3 +1,7 @@
+## 0.3.16
+
+* `CHANGED` jsxdata support `disabled`
+
 ## 0.3.15
 
 * `CHANGED` remove deprecated warning

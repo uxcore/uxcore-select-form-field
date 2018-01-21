@@ -26,6 +26,10 @@ class Demo extends React.Component {
         dj: '东',
         xj: '西',
       },
+      jsxdata2: [
+        { value: 'bj', text: '北京', disabled: true },
+        { value: 'nj', text: '南京' },
+      ],
       mode: Constants.MODE.EDIT,
       value: 'aaa',
     };
@@ -87,10 +91,10 @@ class Demo extends React.Component {
             jsxname="city"
             allowClear
             size="small"
-            combobox={true}
+            // combobox
             jsxrules={{ validator: Validators.isNotEmpty, errMsg: '不能为空' }}
             disabled={false}
-            jsxdata={me.state.jsxdata}
+            jsxdata={me.state.jsxdata2}
             onSearch={(value) => { }}
             onFocus={() => { console.log('focus'); }}
             onBlur={() => { console.log('blur'); }}

@@ -143,7 +143,7 @@ class SelectFormField extends FormField {
       }
     }
     const arr = values.map(item =>
-      (<Option key={item.value} title={item.text}>
+      (<Option key={item.value} title={item.text} disabled={item.disabled}>
         {item.text}
       </Option>),
     );
