@@ -9,7 +9,7 @@ import Select from 'uxcore-select2';
 import assign from 'object-assign';
 import Validator from 'uxcore-validator';
 import isEqual from 'lodash/isEqual';
-import NattyFetch from 'natty-fetch/dist/natty-fetch.pc';
+import NattyFetch from 'natty-fetch';
 import Promise from 'lie';
 import util from './util';
 
