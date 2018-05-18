@@ -7,7 +7,6 @@ import FormField from 'uxcore-form-field';
 import Constants from 'uxcore-const';
 import Select from 'uxcore-select2';
 import assign from 'object-assign';
-import Validator from 'uxcore-validator';
 import isEqual from 'lodash/isEqual';
 import NattyFetch from 'natty-fetch';
 import Promise from 'lie';
@@ -15,7 +14,6 @@ import util from './util';
 
 const { processData, transferDataToObj, getValuePropValue } = util;
 
-const { isArray } = Validator;
 const { Option } = Select;
 const selectOptions = ['onDeselect', 'getPopupContainer',
   'multiple', 'filterOption', 'allowClear', 'combobox', 'searchPlaceholder',
@@ -249,7 +247,7 @@ class SelectFormField extends FormField {
       let str = '';
       if (me.state.value) {
         const value = me.processValue();
-        const values = !isArray(value) ? [value] : value;
+        const values = !Array.isArray(value) ? [value] : value;
         // labelInValue mode
         if (me.props.jsxfetchUrl || me.props.onSearch || me.props.labelInValue) {
           str = values.map(item => (item.label || item.key)).join(' ');
