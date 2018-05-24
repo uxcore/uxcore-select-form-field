@@ -1,3 +1,7 @@
+## 0.3.17
+
+* `FIXED` jsxonChange cannot fire correctly 
+
 ## 0.3.16
 
 * `CHANGED` jsxdata support `disabled`

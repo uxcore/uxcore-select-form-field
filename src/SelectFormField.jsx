@@ -111,9 +111,9 @@ class SelectFormField extends FormField {
     });
   }
 
-  handleChange(value, label) {
+  handleChange(value) {
     const me = this;
-    me.handleDataChange(value, false, label);
+    me.handleDataChange(value);
   }
 
   handleSearch(value) {
