@@ -10,6 +10,7 @@ import assign from 'object-assign';
 import isEqual from 'lodash/isEqual';
 import NattyFetch from 'natty-fetch';
 import Promise from 'lie';
+import { polyfill } from 'react-lifecycles-compat';
 import util from './util';
 
 const { processData, transferDataToObj, getValuePropValue } = util;
@@ -22,39 +23,36 @@ const selectOptions = ['onDeselect', 'getPopupContainer',
   'notFoundContent', 'labelInValue', 'defaultActiveFirstOption', 'onFocus', 'onBlur'];
 
 class SelectFormField extends FormField {
+  static getDerivedStateFromProps = (props, state) => {
+    const baseUpdate = FormField.getDerivedStateFromProps(props, state);
+    if (!isEqual(props.jsxdata, state.prevPropsData)) {
+      return {
+        ...baseUpdate,
+        data: processData(props.jsxdata),
+        prevPropsData: props.jsxdata,
+      };
+    }
+    return baseUpdate;
+  }
+
   constructor(props) {
     super(props);
     const me = this;
     assign(me.state, {
       data: processData(props.jsxdata),
+      prevPropsData: props.jsxdata,
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    const me = this;
-    super.componentWillReceiveProps(nextProps);
-    if (!isEqual(nextProps.jsxdata, me.props.jsxdata)) {
-      me.setState({
-        data: processData(nextProps.jsxdata),
-      });
-    }
-  }
-
   componentDidMount() {
-    const me = this;
-    if (me.props.jsxfetchUrl && me.props.fetchDataOnMount) {
-      me.fetchData();
-    }
-    if (!me.props.standalone) {
-      me.props.attachFormField(me);
-      me.props.handleDataChange(me, {
-        value: me.processValue(me.props.value),
-        pass: true,
-      }, true);
+    super.componentDidMount();
+    if (this.props.jsxfetchUrl && this.props.fetchDataOnMount) {
+      this.fetchData();
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
+    super.componentDidUpdate(prevProps, prevState);
     const { jsxfetchUrl } = this.props;
     if (jsxfetchUrl && prevProps.jsxfetchUrl !== jsxfetchUrl) {
       this.fetchData();
@@ -324,4 +322,5 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   fetchDataOnMount: true,
 });
 
+polyfill(SelectFormField);
 export default SelectFormField;

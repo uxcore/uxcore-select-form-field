@@ -27,7 +27,7 @@ class Demo extends React.Component {
         xj: '西',
       },
       jsxdata2: [
-        { value: 'bj', text: '北京', disabled: true },
+        { value: 'bj', text: '北京' },
         { value: 'nj', text: '南京' },
       ],
       mode: Constants.MODE.EDIT,
@@ -50,14 +50,6 @@ class Demo extends React.Component {
     me.setState({
       mode: me.state.mode === Constants.MODE.EDIT ? Constants.MODE.VIEW : Constants.MODE.EDIT,
     });
-  }
-
-  handleParentLeave() {
-    alert('parent leave');
-  }
-
-  handleChildLeave() {
-    alert('child leave');
   }
 
   handleClear() {

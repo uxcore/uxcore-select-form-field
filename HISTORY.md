@@ -1,3 +1,7 @@
+## 0.4.0
+
+* `CHANGED` adapt React 16
+
 ## 0.3.19
 
 * `FIXED` jsxonChange cannot fire correctly 
