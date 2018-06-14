@@ -1,6 +1,6 @@
 {
   "name": "uxcore-select-form-field",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "uxcore-select-form-field component for uxcore.",
   "repository": "https://github.com/uxcore/uxcore-select-form-field.git",
   "author": "eternalsky",
@@ -43,7 +43,7 @@
     "uxcore-const": "*",
     "uxcore-form": "*",
     "uxcore-kuma": "*",
-    "uxcore-tools": "0.2.x",
+    "uxcore-tools": "^0.3.0",
     "babel-polyfill": "6.x",
     "enzyme-adapter-react-16": "1.x"
   },
@@ -54,7 +54,6 @@
     "natty-fetch": "^2.1.2",
     "object-assign": "^4.0.0",
     "prop-types": "15.x",
-    "react-lifecycles-compat": "^3.0.4",
     "uxcore-const": "^1.0.0",
     "uxcore-form-field": "^0.3.0",
     "uxcore-select2": "^0.4.0"

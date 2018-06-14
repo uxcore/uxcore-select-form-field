@@ -10,7 +10,6 @@ import assign from 'object-assign';
 import isEqual from 'lodash/isEqual';
 import NattyFetch from 'natty-fetch';
 import Promise from 'lie';
-import { polyfill } from 'react-lifecycles-compat';
 import util from './util';
 
 const { processData, transferDataToObj, getValuePropValue } = util;
@@ -322,5 +321,4 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   fetchDataOnMount: true,
 });
 
-polyfill(SelectFormField);
 export default SelectFormField;
