@@ -149,6 +149,17 @@ class SelectFormField extends FormField {
   }
 
   /**
+   * 获取当前已经选择项的完整数据
+   * 多选时返回数组，单选时返回object
+   */
+  getFullData() {
+    const { data, value } = this.state;
+    if(Array.isArray(value)) {
+      return value.map(selectItem => data.find((item) => item.value === selectItem.key));
+    }
+    return data.find((item) => item.value === value);
+  }
+  /**
    * transfer 'a' to { key: 'a' }
    * transfer ['a'] to [{ key: 'a' }]
    */
