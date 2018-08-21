@@ -203,43 +203,29 @@ describe('SelectFormField', () => {
     expect(wrapper.find('.view-mode').find('.kuma-uxform-field-core').find('span').text()).to.be.equal('*');
   });
 
-  it('get full data', () => {
+  it('get full data', (done) => {
     let selectInstance;
-    let firstItem;
+    const data = {
+      bj: '北京',
+      sh: '上海',
+    };
+
     const wrapper = mount(
-      <Form
-      >
+      <Form >
         <SelectFormField
           ref={(select) => selectInstance = select}
-          jsxlabel="多选模式"
-          closeOnSelect
-          onSelect={(...args) => { console.log(...args); }}
-          jsxname="goods2"
-          multiple
-          jsxfetchUrl="http://suggest.taobao.com/sug"
-          dataType="jsonp"
-          beforeFetch={function (data) {
-            const newData = { ...data };
-            if (newData.q === undefined) {
-              newData.q = 'a';
-            }
-            return newData;
-          }}
-          afterFetch={(obj) => {
-            const data = {};
-            firstItem = obj.result[0];
-            obj.result.forEach((item) => {
-              data[item[1]] = item[0];
-            });
-            return data;
-          }}
+          jsxshowSearch
+          jsxname="test"
+          jsxlabel="test"
+          jsxdata={data}
         />
       </Form>
     );
-    wrapper.find('SelectFormField').props().onSelect();
-    setTimeout(() => {
-      expect(fundata[0].value).to.be.equal(firstItem.value);
-      done();
-    }, wrapper.find('SelectFormField').props().searchDelay);
+    wrapper.find('SelectFormField').find('.kuma-select2-arrow').simulate('click');
+    const dropdownWrapper = mount(wrapper.find('SelectFormField').find('Trigger').instance().getComponent());
+    dropdownWrapper.find('li').at(0).simulate('click');
+    const fundata = selectInstance.getFullData();
+    expect(fundata.value).to.be.equal('bj');
+    done();
   });
 });
