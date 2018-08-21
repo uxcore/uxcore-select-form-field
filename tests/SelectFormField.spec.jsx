@@ -202,4 +202,44 @@ describe('SelectFormField', () => {
     );
     expect(wrapper.find('.view-mode').find('.kuma-uxform-field-core').find('span').text()).to.be.equal('*');
   });
+
+  it('get full data', () => {
+    let selectInstance;
+    let firstItem;
+    const wrapper = mount(
+      <Form
+      >
+        <SelectFormField
+          ref={(select) => selectInstance = select}
+          jsxlabel="多选模式"
+          closeOnSelect
+          onSelect={(...args) => { console.log(...args); }}
+          jsxname="goods2"
+          multiple
+          jsxfetchUrl="http://suggest.taobao.com/sug"
+          dataType="jsonp"
+          beforeFetch={function (data) {
+            const newData = { ...data };
+            if (newData.q === undefined) {
+              newData.q = 'a';
+            }
+            return newData;
+          }}
+          afterFetch={(obj) => {
+            const data = {};
+            firstItem = obj.result[0];
+            obj.result.forEach((item) => {
+              data[item[1]] = item[0];
+            });
+            return data;
+          }}
+        />
+      </Form>
+    );
+    wrapper.find('SelectFormField').props().onSelect();
+    setTimeout(() => {
+      expect(fundata[0].value).to.be.equal(firstItem.value);
+      done();
+    }, wrapper.find('SelectFormField').props().searchDelay);
+  });
 });

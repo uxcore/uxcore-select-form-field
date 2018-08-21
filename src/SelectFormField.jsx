@@ -10,6 +10,7 @@ import assign from 'object-assign';
 import isEqual from 'lodash/isEqual';
 import NattyFetch from 'natty-fetch';
 import Promise from 'lie';
+import find from 'lodash/find';
 import util from './util';
 
 const { processData, transferDataToObj, getValuePropValue } = util;
@@ -155,9 +156,9 @@ class SelectFormField extends FormField {
   getFullData() {
     const { data, value } = this.state;
     if(Array.isArray(value)) {
-      return value.map(selectItem => data.find((item) => item.value === selectItem.key));
+      return value.map(selectItem => find(data, (item) => item.value === selectItem.key));
     }
-    return data.find((item) => item.value === value);
+    return find(data, (item) => item.value === value);
   }
   /**
    * transfer 'a' to { key: 'a' }
