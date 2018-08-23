@@ -202,4 +202,30 @@ describe('SelectFormField', () => {
     );
     expect(wrapper.find('.view-mode').find('.kuma-uxform-field-core').find('span').text()).to.be.equal('*');
   });
+
+  it('get full data', (done) => {
+    let selectInstance;
+    const data = {
+      bj: '北京',
+      sh: '上海',
+    };
+
+    const wrapper = mount(
+      <Form >
+        <SelectFormField
+          ref={(select) => selectInstance = select}
+          jsxshowSearch
+          jsxname="test"
+          jsxlabel="test"
+          jsxdata={data}
+        />
+      </Form>
+    );
+    wrapper.find('SelectFormField').find('.kuma-select2-arrow').simulate('click');
+    const dropdownWrapper = mount(wrapper.find('SelectFormField').find('Trigger').instance().getComponent());
+    dropdownWrapper.find('li').at(0).simulate('click');
+    const fundata = selectInstance.getFullData();
+    expect(fundata.value).to.be.equal('bj');
+    done();
+  });
 });

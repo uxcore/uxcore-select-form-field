@@ -2,6 +2,10 @@
 
 * `CHANGED` adapt React 16
 
+## 0.3.20
+
+* `CHANGED` new api getFullData
+
 ## 0.3.19
 
 * `FIXED` jsxonChange cannot fire correctly 

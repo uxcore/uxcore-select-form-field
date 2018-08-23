@@ -10,6 +10,7 @@ import assign from 'object-assign';
 import isEqual from 'lodash/isEqual';
 import NattyFetch from 'natty-fetch';
 import Promise from 'lie';
+import find from 'lodash/find';
 import util from './util';
 
 const { processData, transferDataToObj, getValuePropValue } = util;
@@ -145,6 +146,17 @@ class SelectFormField extends FormField {
     return arr;
   }
 
+  /**
+   * 获取当前已经选择项的完整数据
+   * 多选时返回数组，单选时返回object
+   */
+  getFullData() {
+    const { data, value } = this.state;
+    if(Array.isArray(value)) {
+      return value.map(selectItem => find(data, (item) => item.value === selectItem.key));
+    }
+    return find(data, (item) => item.value === value);
+  }
   /**
    * transfer 'a' to { key: 'a' }
    * transfer ['a'] to [{ key: 'a' }]

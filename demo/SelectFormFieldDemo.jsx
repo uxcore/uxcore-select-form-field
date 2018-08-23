@@ -33,6 +33,8 @@ class Demo extends React.Component {
       mode: Constants.MODE.EDIT,
       value: 'aaa',
     };
+    
+    this.change = this.change.bind(this);
   }
 
   handleOptionChange() {
@@ -71,12 +73,21 @@ class Demo extends React.Component {
     }
     return arr;
   }
+  
+  change(value, name) {
+    console.log(value, name);
+    console.log(this.refs[name].getFullData());
+  }
 
   render() {
     const me = this;
     return (
       <div>
-        <Form jsxmode={me.state.mode} jsxvalues={{ city: this.state.value, city2: '*' }}>
+        <Form
+          jsxmode={me.state.mode}
+          jsxvalues={{ city: this.state.value, city2: '*' }}
+          jsxonChange={this.change}
+        >
           <SelectFormField
             jsxstyle={{ width: '800px' }}
             jsxlabel="单选"
@@ -99,6 +110,7 @@ class Demo extends React.Component {
             {me.renderOptions()}
           </SelectFormField>
           <SelectFormField
+            ref="goods2"
             jsxlabel="多选模式"
             closeOnSelect
             onSelect={(...args) => { console.log(...args); }}
