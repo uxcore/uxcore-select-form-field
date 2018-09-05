@@ -38,9 +38,10 @@ class SelectFormField extends FormField {
   constructor(props) {
     super(props);
     const me = this;
+    const { jsxdata } = props;
     assign(me.state, {
-      data: processData(props.jsxdata),
-      prevPropsData: props.jsxdata,
+      data: processData(jsxdata),
+      prevPropsData: jsxdata,
     });
   }
 
@@ -131,18 +132,20 @@ class SelectFormField extends FormField {
   _generateOptionsFromData() {
     const me = this;
     const values = me.state.data;
-    const children = me.props.children;
+    const { children } = me.props;
     if (!values.length) {
-      // console.warn("You need to pass data to initialize Select.");
       if (children) {
         return children;
       }
     }
-    const arr = values.map(item =>
-      (<Option key={item.value} title={item.text} disabled={item.disabled}>
-        {item.text}
-      </Option>),
-    );
+    const arr = values.map((item) => {
+      const { value, text, ...others } = item;
+      return (
+        <Option key={value} title={text} {...others}>
+          {item.text}
+        </Option>
+      );
+    });
     return arr;
   }
 
@@ -152,11 +155,12 @@ class SelectFormField extends FormField {
    */
   getFullData() {
     const { data, value } = this.state;
-    if(Array.isArray(value)) {
-      return value.map(selectItem => find(data, (item) => item.value === selectItem.key));
+    if (Array.isArray(value)) {
+      return value.map(selectItem => find(data, item => item.value === selectItem.key));
     }
-    return find(data, (item) => item.value === value);
+    return find(data, item => item.value === value);
   }
+
   /**
    * transfer 'a' to { key: 'a' }
    * transfer ['a'] to [{ key: 'a' }]
@@ -174,7 +178,7 @@ class SelectFormField extends FormField {
       return {
         key: newValue,
       };
-    } else if (newValue instanceof Array) {
+    } if (newValue instanceof Array) {
       return newValue.map((item) => {
         if (typeof item === 'string') {
           return {
@@ -248,9 +252,11 @@ class SelectFormField extends FormField {
       }
       /* eslint-disable no-underscore-dangle */
       /* used in SearchFormField */
-      arr.push(<Select {...options}>
-        {me._generateOptionsFromData()}
-      </Select>);
+      arr.push(
+        <Select {...options}>
+          {me._generateOptionsFromData()}
+        </Select>,
+      );
       /* eslint-enable no-underscore-dangle */
     } else if (mode === Constants.MODE.VIEW) {
       let str = '';
@@ -281,7 +287,11 @@ class SelectFormField extends FormField {
           });
         }
       }
-      arr.push(<span key="select">{str}</span>);
+      arr.push(
+        <span key="select">
+          {str}
+        </span>,
+      );
     }
     return arr;
   }
@@ -318,11 +328,10 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   searchDelay: 100,
   beforeFetch: obj => obj,
   afterFetch: obj => obj,
-  fitResponse: response =>
-    ({
-      content: response.content || response,
-      success: response.success === undefined ? true : response.success,
-    }),
+  fitResponse: response => ({
+    content: response.content || response,
+    success: response.success === undefined ? true : response.success,
+  }),
   jsxshowSearch: true,
   jsxallowClear: false,
   jsxtags: false,

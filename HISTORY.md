@@ -1,3 +1,7 @@
+## 0.4.4
+
+* `CHANGED` pass other data item to Option
+
 ## 0.4.0
 
 * `CHANGED` adapt React 16
