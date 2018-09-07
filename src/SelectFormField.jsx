@@ -7,6 +7,7 @@ import FormField from 'uxcore-form-field';
 import Constants from 'uxcore-const';
 import Select from 'uxcore-select2';
 import assign from 'object-assign';
+import isObject from 'lodash/isObject';
 import isEqual from 'lodash/isEqual';
 import NattyFetch from 'natty-fetch';
 import Promise from 'lie';
@@ -144,7 +145,7 @@ class SelectFormField extends FormField {
     const arr = values.map(item =>
       (<Option key={item.value} title={item.text} disabled={item.disabled}>
         {item.text}
-      </Option>),
+      </Option>)
     );
     return arr;
   }
@@ -155,8 +156,11 @@ class SelectFormField extends FormField {
    */
   getFullData() {
     const { data, value } = this.state;
-    if(Array.isArray(value)) {
-      return value.map(selectItem => find(data, (item) => item.value === selectItem.key));
+    if (Array.isArray(value)) {
+      return value.map(selectItem => find(data, (item) => item.value === selectItem.key)).filter(i => i !== undefined);
+    }
+    if (isObject(value)) {
+      return find(data, (item) => item.value === value.key);
     }
     return find(data, (item) => item.value === value);
   }
