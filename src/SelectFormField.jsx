@@ -153,6 +153,7 @@ class SelectFormField extends FormField {
   /**
    * 获取当前已经选择项的完整数据
    * 多选时返回数组，单选时返回object
+   * 新增如果value is object。
    */
   getFullData() {
     const { data, value } = this.state;
