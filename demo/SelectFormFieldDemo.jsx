@@ -97,6 +97,7 @@ class Demo extends React.Component {
           jsxonChange={this.change}
         >
           <SelectFormField
+            ref="city"
             jsxstyle={{ width: '800px' }}
             jsxlabel="单选"
             jsxname="city"
@@ -114,6 +115,7 @@ class Demo extends React.Component {
             jsxlabel="单选2"
             jsxname="city2"
             allowClear
+            ref="city2"
           >
             {me.renderOptions()}
           </SelectFormField>

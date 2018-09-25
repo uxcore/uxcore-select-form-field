@@ -153,12 +153,17 @@ class SelectFormField extends FormField {
   /**
    * 获取当前已经选择项的完整数据
    * 多选时返回数组，单选时返回object
-   * 新增如果value is object。
+   * 新增value is object。
    */
   getFullData() {
     const { data, value } = this.state;
     if (Array.isArray(value)) {
-      return value.map(selectItem => find(data, (item) => item.value === selectItem.key)).filter(i => i !== undefined);
+      return value.map(selectItem => {
+        if (isObject(selectItem)) {
+          return find(data, (item) => item.value === selectItem.key);
+        }
+        return find(data, (item) => item.value === selectItem);
+      }).filter(i => i !== undefined);
     }
     if (isObject(value)) {
       return find(data, (item) => item.value === value.key);
