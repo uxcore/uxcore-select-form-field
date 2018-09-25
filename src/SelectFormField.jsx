@@ -7,6 +7,7 @@ import FormField from 'uxcore-form-field';
 import Constants from 'uxcore-const';
 import Select from 'uxcore-select2';
 import assign from 'object-assign';
+import isObject from 'lodash/isObject';
 import isEqual from 'lodash/isEqual';
 import NattyFetch from 'natty-fetch';
 import Promise from 'lie';
@@ -144,7 +145,7 @@ class SelectFormField extends FormField {
     const arr = values.map(item =>
       (<Option key={item.value} title={item.text} disabled={item.disabled}>
         {item.text}
-      </Option>),
+      </Option>)
     );
     return arr;
   }
@@ -152,11 +153,20 @@ class SelectFormField extends FormField {
   /**
    * 获取当前已经选择项的完整数据
    * 多选时返回数组，单选时返回object
+   * 新增value is object。
    */
   getFullData() {
     const { data, value } = this.state;
-    if(Array.isArray(value)) {
-      return value.map(selectItem => find(data, (item) => item.value === selectItem.key));
+    if (Array.isArray(value)) {
+      return value.map(selectItem => {
+        if (isObject(selectItem)) {
+          return find(data, (item) => item.value === selectItem.key);
+        }
+        return find(data, (item) => item.value === selectItem);
+      }).filter(i => i !== undefined);
+    }
+    if (isObject(value)) {
+      return find(data, (item) => item.value === value.key);
     }
     return find(data, (item) => item.value === value);
   }
