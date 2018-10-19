@@ -112,9 +112,28 @@ class SelectFormField extends FormField {
   }
 
   handleChange(value) {
-    const me = this;
-    console.log(value);
-    me.handleDataChange(value);
+    const {
+      useValueText, jsxfetchUrl, onSearch, labelInValue,
+    } = this.props;
+    const labelInValueMode = !!jsxfetchUrl || !!onSearch || labelInValue;
+    if (labelInValueMode && useValueText) {
+      let newValue = value;
+      if (Array.isArray(value)) {
+        newValue = value.map(item => ({
+          value: item.key,
+          text: item.label,
+        }));
+      }
+      if (typeof value === 'object' && value !== null) {
+        newValue = {
+          value: value.key,
+          text: value.label,
+        };
+      }
+      this.handleDataChange(newValue);
+    } else {
+      this.handleDataChange(value);
+    }
   }
 
   handleSearch(value) {
@@ -331,6 +350,7 @@ SelectFormField.propTypes = assign({}, FormField.propTypes, {
   optionFilterProp: PropTypes.string,
   dataType: PropTypes.string,
   fetchDataOnMount: PropTypes.bool,
+  useValueText: PropTypes.bool,
 });
 
 SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
@@ -353,6 +373,7 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   optionFilterProp: 'children',
   optionLabelProp: 'children',
   fetchDataOnMount: true,
+  useValueText: false,
 });
 
 export default SelectFormField;

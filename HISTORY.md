@@ -2,6 +2,7 @@
 
 * `CHANGED` support value is {value, text}
 * `CHANGED` support jsxdata is {key, label}
+* `NEW` new prop `useValueText`
 
 ## 0.4.4
 

@@ -147,13 +147,13 @@ class Demo extends React.Component {
 
         </Form>
         <Button onClick={me.handleModeChange.bind(me)}>
-切换模式
+          切换模式
         </Button>
         <Button onClick={me.handleOptionChange.bind(me)}>
-更改选项
+          更改选项
         </Button>
         <Button onClick={() => { me.handleClear(); }}>
-清空值
+          清空值
         </Button>
       </div>
     );

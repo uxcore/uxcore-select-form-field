@@ -156,6 +156,64 @@ describe('SelectFormField', () => {
     done();
   });
 
+  it('should return {key, label} in onChange searchMode ', (done) => {
+    const data = {
+      bj: '北京',
+      sh: '上海',
+    };
+
+    const wrapper = mount(
+      <Form
+        jsxonChange={(value, name) => {
+          expect(JSON.stringify(value.test)).to.be.equal(JSON.stringify({ key: 'bj', label: '北京' }));
+          expect(name).to.be.equal('test');
+        }}
+      >
+        <SelectFormField
+          jsxshowSearch
+          jsxname="test"
+          jsxlabel="test"
+          jsxdata={data}
+          onSearch={() => {}}
+        />
+      </Form>,
+    );
+    wrapper.find('SelectFormField').find('.kuma-select2-arrow').simulate('click');
+    const dropdownWrapper = mount(wrapper.find('SelectFormField').find('Trigger').instance().getComponent());
+    dropdownWrapper.find('li').at(0).simulate('click');
+    done();
+  });
+  
+
+  it('should return {value, text} in onChange searchMode if useValueText', (done) => {
+    const data = {
+      bj: '北京',
+      sh: '上海',
+    };
+
+    const wrapper = mount(
+      <Form
+        jsxonChange={(value, name) => {
+          expect(JSON.stringify(value.test)).to.be.equal(JSON.stringify({ value: 'bj', text: '北京' }));
+          expect(name).to.be.equal('test');
+        }}
+      >
+        <SelectFormField
+          jsxshowSearch
+          jsxname="test"
+          jsxlabel="test"
+          jsxdata={data}
+          useValueText
+          onSearch={() => {}}
+        />
+      </Form>,
+    );
+    wrapper.find('SelectFormField').find('.kuma-select2-arrow').simulate('click');
+    const dropdownWrapper = mount(wrapper.find('SelectFormField').find('Trigger').instance().getComponent());
+    dropdownWrapper.find('li').at(0).simulate('click');
+    done();
+  });
+
   it('should render correctly in view mode', (done) => {
     const wrapper = mount(
       <Form jsxvalues={{ test: 'bj' }}>
