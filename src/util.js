@@ -6,12 +6,10 @@ const processData = (data) => {
   let values = [];
   if (typeof data === 'object' && !(data instanceof Array)) {
     const keys = Object.keys(data);
-    values = keys.map(key =>
-      ({
-        value: key,
-        text: data[key],
-      }),
-    );
+    values = keys.map(key => ({
+      value: key,
+      text: data[key],
+    }));
   } else {
     values = data;
   }

@@ -1,3 +1,11 @@
+## 0.4.4
+
+* `CHANGED` pass other data item to Option
+
+## 0.4.0
+
+* `CHANGED` adapt React 16
+
 ## 0.3.20
 
 * `CHANGED` new api getFullData
