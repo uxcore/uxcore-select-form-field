@@ -12,19 +12,89 @@ const { Option } = SelectFormField;
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('SelectFormField', () => {
-  it('jsxshowSearch', (done) => {
+  it('should support value is {key, label}', () => {
+    const data = [
+      { key: 'bj', label: '北京' },
+      { key: 'sh', label: '上海' },
+    ];
     const wrapper = mount(
-      <Form><SelectFormField jsxshowSearch jsxname="test" jsxlabel="test" /></Form>
+      <Form jsxvalues={{ test: { key: 'bj' } }}>
+        <SelectFormField
+          jsxshowSearch
+          onSearch={() => {}}
+          jsxname="test"
+          jsxlabel="test"
+          jsxdata={data}
+        />
+      </Form>,
     );
-    expect(wrapper.find('SelectFormField').props().jsxshowSearch).to.equal(true);
-    done();
+    expect(wrapper.find('.kuma-select2-selection-selected-value').text()).to.be('北京');
   });
 
-  it('jsxdata', (done) => {
-    const data = {
-      bj: '北京',
-      sh: '上海',
-    };
+  it('should support value is {value, text}', () => {
+    const data = [
+      { key: 'bj', label: '北京' },
+      { key: 'sh', label: '上海' },
+    ];
+    const wrapper = mount(
+      <Form jsxvalues={{ test: { value: 'bj' } }}>
+        <SelectFormField
+          jsxshowSearch
+          onSearch={() => {}}
+          jsxname="test"
+          jsxlabel="test"
+          jsxdata={data}
+        />
+      </Form>,
+    );
+    expect(wrapper.find('.kuma-select2-selection-selected-value').text()).to.be('北京');
+  });
+
+  it('should support value is [{key, label}] when multiple', () => {
+    const data = [
+      { key: 'bj', label: '北京' },
+      { key: 'sh', label: '上海' },
+    ];
+    const wrapper = mount(
+      <Form jsxvalues={{ test: [{ key: 'bj' }] }}>
+        <SelectFormField
+          jsxshowSearch
+          jsxname="test"
+          jsxlabel="test"
+          jsxdata={data}
+          onSearch
+          multiple
+        />
+      </Form>,
+    );
+    expect(wrapper.find('.kuma-select2-selection__choice__content').at(0).text()).to.be('北京');
+  });
+
+  it('should support value is [{value, text}] when multiple', () => {
+    const data = [
+      { key: 'bj', label: '北京' },
+      { key: 'sh', label: '上海' },
+    ];
+    const wrapper = mount(
+      <Form jsxvalues={{ test: [{ value: 'bj' }] }}>
+        <SelectFormField
+          jsxshowSearch
+          jsxname="test"
+          jsxlabel="test"
+          jsxdata={data}
+          onSearch
+          multiple
+        />
+      </Form>,
+    );
+    expect(wrapper.find('.kuma-select2-selection__choice__content').at(0).text()).to.be('北京');
+  });
+
+  it('should support jsxdata is {key, label}', () => {
+    const data = [
+      { key: 'bj', label: '北京' },
+      { key: 'sh', label: '上海' },
+    ];
     const wrapper = mount(
       <Form>
         <SelectFormField
@@ -33,36 +103,33 @@ describe('SelectFormField', () => {
           jsxlabel="test"
           jsxdata={data}
         />
-      </Form>
-      );
-    expect(JSON.stringify(wrapper.find('SelectFormField').props().jsxdata)).to.be(JSON.stringify({ bj: '北京', sh: '上海' }));
-    done();
+      </Form>,
+    );
+    wrapper.find('SelectFormField').find('.kuma-select2').simulate('click');
+    const dropdownWrapper = mount(wrapper.find('SelectFormField').find('Trigger').instance().getComponent());
+    expect(dropdownWrapper.find('li').at(0).text()).to.be('北京');
   });
-
-  it('searchDelay', (done) => {
-    let testData = 'test';
+  it('should support jsxdata is {value, text}', () => {
+    const data = [
+      { value: 'bj', text: '北京' },
+      { value: 'sh', text: '上海' },
+    ];
     const wrapper = mount(
       <Form>
         <SelectFormField
           jsxshowSearch
           jsxname="test"
           jsxlabel="test"
-          jsxfetchUrl="http://eternalsky.me:8122/file/getGridJson.jsonp"
-          searchDelay={100}
-          onSelect={() => {
-            testData = 'test2';
-          }}
+          jsxdata={data}
         />
-      </Form>
-      );
-    wrapper.find('SelectFormField').props().onSelect();
-    setTimeout(() => {
-      expect(testData).to.be('test2');
-      done();
-    }, wrapper.find('SelectFormField').props().searchDelay);
+      </Form>,
+    );
+    wrapper.find('SelectFormField').find('.kuma-select2').simulate('click');
+    const dropdownWrapper = mount(wrapper.find('SelectFormField').find('Trigger').instance().getComponent());
+    expect(dropdownWrapper.find('li').at(0).text()).to.be('北京');
   });
 
-  it('handleChange', (done) => {
+  it('should support handleChange', (done) => {
     const data = {
       bj: '北京',
       sh: '上海',
@@ -81,7 +148,7 @@ describe('SelectFormField', () => {
           jsxlabel="test"
           jsxdata={data}
         />
-      </Form>
+      </Form>,
     );
     wrapper.find('SelectFormField').find('.kuma-select2-arrow').simulate('click');
     const dropdownWrapper = mount(wrapper.find('SelectFormField').find('Trigger').instance().getComponent());
@@ -89,7 +156,7 @@ describe('SelectFormField', () => {
     done();
   });
 
-  it('jsxmode', (done) => {
+  it('should render correctly in view mode', (done) => {
     const wrapper = mount(
       <Form jsxvalues={{ test: 'bj' }}>
         <SelectFormField
@@ -98,63 +165,17 @@ describe('SelectFormField', () => {
           jsxname="test"
           jsxlabel="test"
         >
-          <Option value="bj">北京</Option>
-          <Option value="sh">上海</Option>
+          <Option value="bj">
+            北京
+          </Option>
+          <Option value="sh">
+            上海
+          </Option>
         </SelectFormField>
-      </Form>
+      </Form>,
     );
-    expect(wrapper.find('SelectFormField').find('.view-mode').find('.kuma-uxform-field-core').find('span').text()).to.be.equal('北京 ');
-    done();
-  });
-
-
-  it('componentWillReceiveProps', (done) => {
-    const data = {
-      bj: '北京',
-      sh: '上海',
-    };
-
-    const data2 = {
-      bj: '北京',
-      sh: '上海',
-      sz: '深圳',
-    };
-
-    const wrapper = mount(
-      <Form>
-        <SelectFormField
-          jsxshowSearch
-          jsxname="test"
-          jsxlabel="test"
-          jsxdata={data}
-        />
-      </Form>
-    );
-
-    wrapper.setProps({ jsxdata: data2 });
-    expect(JSON.stringify(wrapper.props().jsxdata)).to.be(JSON.stringify({ bj: '北京', sh: '上海', sz: '深圳' }));
-    done();
-  });
-
-  it('transferDataToObj', (done) => {
-    const data = {
-      bj: '北京',
-      sh: '上海',
-    };
-
-    const wrapper = mount(
-      <Form jsxvalues={{ test: 'sh' }}>
-        <SelectFormField
-          jsxmode={Constants.MODE.VIEW}
-          jsxshowSearch
-          jsxname="test"
-          jsxlabel="test"
-          jsxdata={data}
-        />
-      </Form>
-    );
-
-    expect(wrapper.find('SelectFormField').find('.view-mode').find('.kuma-uxform-field-core').find('span').text()).to.be.equal('上海 ');
+    expect(wrapper.find('SelectFormField').find('.view-mode').find('.kuma-uxform-field-core').find('span')
+      .text()).to.be.equal('北京 ');
     done();
   });
 
@@ -169,7 +190,7 @@ describe('SelectFormField', () => {
         jsxmode={Constants.MODE.VIEW}
         jsxdata={data}
         value="*"
-      />
+      />,
     );
     expect(wrapper.find('.view-mode').find('.kuma-uxform-field-core').find('span').text()).to.be.equal('* ');
   });
@@ -181,9 +202,13 @@ describe('SelectFormField', () => {
         jsxmode={Constants.MODE.VIEW}
         value="*"
       >
-        <Option key="bj">北京</Option>
-        <Option key="nj">南京</Option>
-      </SelectFormField>
+        <Option key="bj">
+          北京
+        </Option>
+        <Option key="nj">
+          南京
+        </Option>
+      </SelectFormField>,
     );
     expect(wrapper.find('.view-mode').find('.kuma-uxform-field-core').find('span').text()).to.be.equal('*');
   });
@@ -194,16 +219,20 @@ describe('SelectFormField', () => {
         standalone
         jsxmode={Constants.MODE.VIEW}
         value={{ key: '*' }}
-        onSearch={() => {}}
+        onSearch={() => { }}
       >
-        <Option key="bj">北京</Option>
-        <Option key="nj">南京</Option>
-      </SelectFormField>
+        <Option key="bj">
+          北京
+        </Option>
+        <Option key="nj">
+          南京
+        </Option>
+      </SelectFormField>,
     );
     expect(wrapper.find('.view-mode').find('.kuma-uxform-field-core').find('span').text()).to.be.equal('*');
   });
 
-  it('get full data', (done) => {
+  it('should support getFullData', (done) => {
     let selectInstance;
     const data = {
       bj: '北京',
@@ -211,15 +240,17 @@ describe('SelectFormField', () => {
     };
 
     const wrapper = mount(
-      <Form >
+      <Form>
         <SelectFormField
-          ref={(select) => selectInstance = select}
+          ref={(select) => {
+            selectInstance = select;
+          }}
           jsxshowSearch
           jsxname="test"
           jsxlabel="test"
           jsxdata={data}
         />
-      </Form>
+      </Form>,
     );
     wrapper.find('SelectFormField').find('.kuma-select2-arrow').simulate('click');
     const dropdownWrapper = mount(wrapper.find('SelectFormField').find('Trigger').instance().getComponent());

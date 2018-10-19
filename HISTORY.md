@@ -1,3 +1,8 @@
+## 0.4.5
+
+* `CHANGED` support value is {value, text}
+* `CHANGED` support jsxdata is {key, label}
+
 ## 0.4.4
 
 * `CHANGED` pass other data item to Option

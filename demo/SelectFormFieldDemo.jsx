@@ -33,7 +33,7 @@ class Demo extends React.Component {
       mode: Constants.MODE.EDIT,
       value: 'aaa',
     };
-    
+
     this.change = this.change.bind(this);
   }
 
@@ -60,23 +60,32 @@ class Demo extends React.Component {
     });
   }
 
+
+  change(value, name) {
+    console.log(value, name);
+    console.log(this.refs[name].getFullData());
+  }
+
   renderOptions() {
     const me = this;
     let arr = [];
     if (me.state.jsxdata instanceof Array) {
-      arr = me.state.jsxdata.map(item => (<Option key={item.value}>{item.text}</Option>));
+      arr = me.state.jsxdata.map(item => (
+        <Option key={item.value}>
+          {item.text}
+        </Option>
+      ));
     } else {
       const key = Object.keys(me.state.jsxdata);
       key.forEach((v) => {
-        arr.push(<Option key={v}>{me.state.jsxdata[v]}</Option>);
+        arr.push(
+          <Option key={v}>
+            {me.state.jsxdata[v]}
+          </Option>,
+        );
       });
     }
     return arr;
-  }
-  
-  change(value, name) {
-    console.log(value, name);
-    console.log(this.refs[name].getFullData());
   }
 
   render() {
@@ -137,9 +146,15 @@ class Demo extends React.Component {
           />
 
         </Form>
-        <Button onClick={me.handleModeChange.bind(me)}>切换模式</Button>
-        <Button onClick={me.handleOptionChange.bind(me)}>更改选项</Button>
-        <Button onClick={() => { me.handleClear(); }}>清空值</Button>
+        <Button onClick={me.handleModeChange.bind(me)}>
+切换模式
+        </Button>
+        <Button onClick={me.handleOptionChange.bind(me)}>
+更改选项
+        </Button>
+        <Button onClick={() => { me.handleClear(); }}>
+清空值
+        </Button>
       </div>
     );
   }

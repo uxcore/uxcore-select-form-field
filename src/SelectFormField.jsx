@@ -113,6 +113,7 @@ class SelectFormField extends FormField {
 
   handleChange(value) {
     const me = this;
+    console.log(value);
     me.handleDataChange(value);
   }
 
@@ -174,6 +175,8 @@ class SelectFormField extends FormField {
   /**
    * transfer 'a' to { key: 'a' }
    * transfer ['a'] to [{ key: 'a' }]
+   * transfer { value: 'a', text: 'A' } to { key: 'a', label: 'A' }
+   * transfer [{ value: 'a', text: 'A' }] to [{ key: 'x', label: 'A' }]
    */
   processValue(value) {
     const me = this;
@@ -188,15 +191,15 @@ class SelectFormField extends FormField {
       return {
         key: newValue,
       };
-    } if (newValue instanceof Array) {
-      return newValue.map((item) => {
-        if (typeof item === 'string') {
-          return {
-            key: item,
-          };
-        }
-        return item;
-      });
+    }
+    if (newValue instanceof Array) {
+      return newValue.map(item => this.processValue(item));
+    }
+    if (typeof newValue === 'object' && newValue !== null) {
+      return {
+        key: newValue.value || newValue.key,
+        label: newValue.text || newValue.label,
+      };
     }
     return newValue;
   }

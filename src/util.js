@@ -1,6 +1,7 @@
 
 /**
  * transfer { a: 'A' } to [{value: 'a', text: 'A'}]
+ * transfer [{key: 'a', label: 'A'}] to [{value: 'a', text: 'A'}]
  */
 const processData = (data) => {
   let values = [];
@@ -11,7 +12,10 @@ const processData = (data) => {
       text: data[key],
     }));
   } else {
-    values = data;
+    values = data.map(item => ({
+      value: item.key || item.value,
+      text: item.label || item.text,
+    }));
   }
   return values;
 };
