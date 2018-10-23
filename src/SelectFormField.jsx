@@ -315,16 +315,16 @@ class SelectFormField extends FormField {
           }
         } else {
           // only jsxdata
-          values.forEach((item) => {
+          str = values.map((item) => {
             const label = transferDataToObj(me.state.data)[item === '' ? '__all__' : item];
-            str += `${label || item}${splitter}`;
-          });
+            return label || item;
+          }).join(splitter);
         }
       }
       arr.push(
-        <p key="select">
+        <span key="select">
           {str}
-        </p>,
+        </span>,
       );
     }
     return arr;

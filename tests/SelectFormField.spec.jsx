@@ -250,7 +250,7 @@ describe('SelectFormField', () => {
         value="*"
       />,
     );
-    expect(wrapper.find('.view-mode').find('.kuma-uxform-field-core').find('span').text()).to.be.equal('* ');
+    expect(wrapper.find('.view-mode').find('.kuma-uxform-field-core').find('span').text()).to.be.equal('*');
   });
 
   it('should show key if label is not found in Option mode', () => {
