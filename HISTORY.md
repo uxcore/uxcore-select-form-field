@@ -1,3 +1,8 @@
+## 0.4.6
+
+* `CHANGED` use comma splitter in view mode
+* `FIXED` getFullData fail to work
+
 ## 0.4.5
 
 * `CHANGED` support value is {value, text}

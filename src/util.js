@@ -12,10 +12,17 @@ const processData = (data) => {
       text: data[key],
     }));
   } else {
-    values = data.map(item => ({
-      value: item.key || item.value,
-      text: item.label || item.text,
-    }));
+    values = data.map((item) => {
+      const newItem = {
+        ...item,
+        value: item.key || item.value,
+        text: item.label || item.text,
+      };
+      ['key', 'label'].forEach((key) => {
+        delete newItem[key];
+      });
+      return newItem;
+    });
   }
   return values;
 };
@@ -41,7 +48,7 @@ const getValuePropValue = (child) => {
   if ('value' in child.props) {
     key = child.props.value;
   } else {
-    key = child.key;
+    ({ key } = child);
   }
   return key;
 };
