@@ -183,7 +183,7 @@ describe('SelectFormField', () => {
     dropdownWrapper.find('li').at(0).simulate('click');
     done();
   });
-  
+
 
   it('should return {value, text} in onChange searchMode if useValueText', (done) => {
     const data = {

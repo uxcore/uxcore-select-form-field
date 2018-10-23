@@ -26,7 +26,8 @@ const selectOptions = ['onDeselect', 'getPopupContainer',
 class SelectFormField extends FormField {
   static getDerivedStateFromProps = (props, state) => {
     const baseUpdate = FormField.getDerivedStateFromProps(props, state);
-    if (!isEqual(props.jsxdata, state.prevPropsData)) {
+    const { jsxdata } = props;
+    if (!isEqual(jsxdata, state.prevPropsData)) {
       return {
         ...baseUpdate,
         data: processData(props.jsxdata),
@@ -172,8 +173,8 @@ class SelectFormField extends FormField {
 
   /**
    * 获取当前已经选择项的完整数据
-   * 多选时返回数组，单选时返回object
-   * 新增value is object。
+   * 多选时返回数组，单选时返回 object
+   * 新增 value is object。
    */
   getFullData() {
     const { data, value } = this.state;
@@ -292,12 +293,13 @@ class SelectFormField extends FormField {
       /* eslint-enable no-underscore-dangle */
     } else if (mode === Constants.MODE.VIEW) {
       let str = '';
+      const splitter = ', \u00a0';
       if (me.state.value) {
         const value = me.processValue();
         const values = !Array.isArray(value) ? [value] : value;
         // labelInValue mode
         if (me.props.jsxfetchUrl || me.props.onSearch || me.props.labelInValue) {
-          str = values.map(item => (item.label || item.key)).join(' ');
+          str = values.map(item => (item.label || item.key)).join(splitter);
         } else if (me.props.children) {
           // <Option> mode
           if (me.props.children) {
@@ -308,21 +310,21 @@ class SelectFormField extends FormField {
               }
             });
             if (str === '') {
-              str = values.join(' ');
+              str = values.join(splitter);
             }
           }
         } else {
           // only jsxdata
           values.forEach((item) => {
             const label = transferDataToObj(me.state.data)[item === '' ? '__all__' : item];
-            str += `${label || item} `;
+            str += `${label || item}${splitter}`;
           });
         }
       }
       arr.push(
-        <span key="select">
+        <p key="select">
           {str}
-        </span>,
+        </p>,
       );
     }
     return arr;
