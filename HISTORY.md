@@ -1,3 +1,7 @@
+## 0.4.8
+
+* `CHANGED` filterOption can be overriden,
+
 ## 0.4.6
 
 * `CHANGED` use comma splitter in view mode

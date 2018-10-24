@@ -263,6 +263,9 @@ class SelectFormField extends FormField {
         size: me.getSize(),
       };
 
+      if (me.props.jsxfetchUrl) {
+        options.filterOption = false;
+      }
 
       selectOptions.forEach((item) => {
         if (item in me.props) {
@@ -276,13 +279,9 @@ class SelectFormField extends FormField {
         options.labelInValue = true;
       }
 
-      // if (!me.props.combobox || me.state.fromReset) { // Why?
       options.value = me.processValue() || [];
-      // }
 
-      if (me.props.jsxfetchUrl) {
-        options.filterOption = false;
-      }
+
       /* eslint-disable no-underscore-dangle */
       /* used in SearchFormField */
       arr.push(
