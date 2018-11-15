@@ -1,3 +1,6 @@
+## 0.4.10
+* `FIXED` fix default value of prop `method`
+
 ## 0.4.9
 
 * `NEW` new prop `method`
