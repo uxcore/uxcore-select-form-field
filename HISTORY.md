@@ -1,3 +1,7 @@
+## 0.4.9
+
+* `NEW` new prop `method`
+
 ## 0.4.8
 
 * `CHANGED` filterOption can be overriden,

@@ -96,6 +96,7 @@ class SelectFormField extends FormField {
       data: me.props.beforeFetch({
         q: value,
       }),
+      method: me.props.method,
       fit: me.props.fitResponse,
       Promise,
     });
@@ -352,6 +353,7 @@ SelectFormField.propTypes = assign({}, FormField.propTypes, {
   dataType: PropTypes.string,
   fetchDataOnMount: PropTypes.bool,
   useValueText: PropTypes.bool,
+  method: PropTypes.string,
 });
 
 SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
@@ -362,6 +364,7 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   searchDelay: 100,
   beforeFetch: obj => obj,
   afterFetch: obj => obj,
+  method: 'get',
   fitResponse: response => ({
     content: response.content || response,
     success: response.success === undefined ? true : response.success,
