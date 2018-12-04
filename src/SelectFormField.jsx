@@ -362,7 +362,7 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   searchDelay: 100,
   beforeFetch: obj => obj,
   afterFetch: obj => obj,
-  method: 'get',
+  method: 'GET',
   fitResponse: response => ({
     content: response.content || response,
     success: response.success === undefined ? true : response.success,
