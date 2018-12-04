@@ -351,6 +351,7 @@ SelectFormField.propTypes = assign({}, FormField.propTypes, {
   fetchDataOnMount: PropTypes.bool,
   useValueText: PropTypes.bool,
   method: PropTypes.string,
+  dropdownAlign: PropTypes.object,
   optionTextRender: PropTypes.func,
 });
 
@@ -362,7 +363,6 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   searchDelay: 100,
   beforeFetch: obj => obj,
   afterFetch: obj => obj,
-  method: 'GET',
   fitResponse: response => ({
     content: response.content || response,
     success: response.success === undefined ? true : response.success,
@@ -376,6 +376,15 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   optionLabelProp: 'children',
   fetchDataOnMount: true,
   useValueText: false,
+  method: 'GET',
+  dropdownAlign: {
+    points: ['tr', 'br', 'tl', 'bl'],
+    offset: [0, 4],
+    overflow: {
+      adjustX: 1,
+      adjustY: 1,
+    },
+  },
   optionTextRender: text => text,
 });
 

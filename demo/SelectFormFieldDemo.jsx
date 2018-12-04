@@ -112,14 +112,6 @@ class Demo extends React.Component {
               jsxrules={{ validator: Validators.isNotEmpty, errMsg: '不能为空' }}
               disabled={false}
               jsxdata={me.state.jsxdata2}
-              dropdownAlign={{
-                points: ['tr', 'br', 'tl', 'bl'],
-                offset: [0, 10],
-                overflow: {
-                  adjustX: 1,
-                  adjustY: 1,
-                },
-              }}
               optionTextRender={(text) => {
                 let shortText = text;
                 const fullLength = text.length;
@@ -146,7 +138,7 @@ class Demo extends React.Component {
               jsxdata={me.state.jsxdata2}
               dropdownAlign={{
                 points: ['tr', 'br', 'tl', 'bl'],
-                offset: [0, 10],
+                offset: [0, 4],
                 overflow: {
                   adjustX: 1,
                   adjustY: 1,
@@ -173,14 +165,6 @@ class Demo extends React.Component {
               jsxrules={{ validator: Validators.isNotEmpty, errMsg: '不能为空' }}
               disabled={false}
               jsxdata={me.state.jsxdata2}
-              dropdownAlign={{
-                points: ['tr', 'br', 'tl', 'bl'],
-                offset: [0, 10],
-                overflow: {
-                  adjustX: 1,
-                  adjustY: 1,
-                },
-              }}
               optionTextRender={(text) => {
                 return <p style={{ whiteSpace: 'normal' }}>{text}</p>;
               }}
