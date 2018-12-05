@@ -1,5 +1,12 @@
+## 0.4.11
+* `CHANGED` add prop optionTextRender; add default dropdownAlign prop value to support tr,br align
+
 ## 0.4.10
 * `FIXED` fix default value of prop `method`
+
+## 0.4.9
+
+* `NEW` new prop `method`
 
 ## 0.4.9
 

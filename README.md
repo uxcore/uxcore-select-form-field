@@ -12,13 +12,13 @@ uxcore-select-form-field ui component for react
 $ git clone https://github.com/uxcore/uxcore-select-form-field
 $ cd uxcore-select-form-field
 $ npm install
-$ gulp server
+$ npm run start
 ```
 
 ## Usage
 
 ## demo
-http://uxcore.github.io/
+http://uxcore.coding.me/
 
 ## API
 
@@ -26,4 +26,4 @@ http://uxcore.github.io/
 
 | 配置项 | 类型 | 必填 | 默认值 | 功能/备注 |
 |---|---|---|---|---|
-
+|  | 类型 | 必填 | 默认值 | 功能/备注 |

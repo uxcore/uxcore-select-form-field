@@ -20,7 +20,7 @@ const { Option } = Select;
 const selectOptions = ['onDeselect', 'getPopupContainer',
   'multiple', 'filterOption', 'allowClear', 'combobox', 'searchPlaceholder',
   'tags', 'disabled', 'showSearch', 'placeholder', 'optionLabelProp',
-  'maxTagTextLength', 'dropdownMatchSelectWidth', 'dropdownClassName',
+  'maxTagTextLength', 'dropdownMatchSelectWidth', 'dropdownClassName', 'dropdownAlign',
   'notFoundContent', 'labelInValue', 'defaultActiveFirstOption', 'onFocus', 'onBlur'];
 
 class SelectFormField extends FormField {
@@ -65,7 +65,6 @@ class SelectFormField extends FormField {
   /**
    * select inner method is used, not very reliable
    */
-
   resetSelect() {
     const me = this;
     const { multiple, closeOnSelect } = me.props;
@@ -155,7 +154,7 @@ class SelectFormField extends FormField {
   _generateOptionsFromData() {
     const me = this;
     const values = me.state.data;
-    const { children } = me.props;
+    const { children, optionTextRender } = me.props;
     if (!values.length) {
       if (children) {
         return children;
@@ -165,7 +164,7 @@ class SelectFormField extends FormField {
       const { value, text, ...others } = item;
       return (
         <Option key={value} title={text} {...others}>
-          {item.text}
+          {optionTextRender ? optionTextRender(item.text, item) : item.text}
         </Option>
       );
     });
@@ -242,14 +241,12 @@ class SelectFormField extends FormField {
       const options = {
         ref: (c) => { this.select = c; },
         key: 'select',
-        optionLabelProp: me.props.optionLabelProp,
         style: me.props.jsxstyle,
         multiple: me.props.jsxmultiple,
         allowClear: me.props.jsxallowClear,
         combobox: me.props.jsxcombobox,
         searchPlaceholder: me.props.jsxsearchPlaceholder,
         tags: me.props.jsxtags,
-        optionFilterProp: me.props.optionFilterProp,
         disabled: !!me.props.jsxdisabled,
         showSearch: me.props.jsxshowSearch,
         placeholder: me.props.jsxplaceholder,
@@ -354,6 +351,8 @@ SelectFormField.propTypes = assign({}, FormField.propTypes, {
   fetchDataOnMount: PropTypes.bool,
   useValueText: PropTypes.bool,
   method: PropTypes.string,
+  dropdownAlign: PropTypes.object,
+  optionTextRender: PropTypes.func,
 });
 
 SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
@@ -364,7 +363,6 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   searchDelay: 100,
   beforeFetch: obj => obj,
   afterFetch: obj => obj,
-  method: 'GET',
   fitResponse: response => ({
     content: response.content || response,
     success: response.success === undefined ? true : response.success,
@@ -378,6 +376,16 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   optionLabelProp: 'children',
   fetchDataOnMount: true,
   useValueText: false,
+  method: 'GET',
+  dropdownAlign: {
+    points: ['tr', 'br', 'tl', 'bl'],
+    offset: [0, 4],
+    overflow: {
+      adjustX: 1,
+      adjustY: 1,
+    },
+  },
+  optionTextRender: text => text,
 });
 
 export default SelectFormField;

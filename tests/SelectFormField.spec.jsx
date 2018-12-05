@@ -245,6 +245,7 @@ describe('SelectFormField', () => {
     const wrapper = mount(
       <SelectFormField
         standalone
+        jsxname="test"
         jsxmode={Constants.MODE.VIEW}
         jsxdata={data}
         value="*"
@@ -257,6 +258,7 @@ describe('SelectFormField', () => {
     const wrapper = mount(
       <SelectFormField
         standalone
+        jsxname="test"
         jsxmode={Constants.MODE.VIEW}
         value="*"
       >
@@ -275,6 +277,7 @@ describe('SelectFormField', () => {
     const wrapper = mount(
       <SelectFormField
         standalone
+        jsxname="test"
         jsxmode={Constants.MODE.VIEW}
         value={{ key: '*' }}
         onSearch={() => { }}
@@ -315,6 +318,35 @@ describe('SelectFormField', () => {
     dropdownWrapper.find('li').at(0).simulate('click');
     const fundata = selectInstance.getFullData();
     expect(fundata.value).to.be.equal('bj');
+    done();
+  });
+
+  it('should support getFullData with array', (done) => {
+    let selectInstance;
+    const data = [
+      { text: '北京', value: 'bj' },
+      { text: '南京', value: 'nj' },
+    ];
+
+    const wrapper = mount(
+      <Form>
+        <SelectFormField
+          ref={(select) => {
+            selectInstance = select;
+          }}
+          multiple
+          jsxname="test"
+          jsxlabel="test"
+          jsxdata={data}
+        />
+      </Form>,
+    );
+    wrapper.find('SelectFormField').find('.kuma-select2-enabled').simulate('click');
+    const dropdownWrapper = mount(wrapper.find('SelectFormField').find('Trigger').instance().getComponent());
+    dropdownWrapper.find('li').at(0).simulate('click');
+    dropdownWrapper.find('li').at(1).simulate('click');
+    const fundata = selectInstance.getFullData();
+    expect(fundata.length).to.be.equal(2);
     done();
   });
 });
