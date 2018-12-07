@@ -19,7 +19,7 @@ const { processData, transferDataToObj, getValuePropValue } = util;
 const { Option } = Select;
 const selectOptions = ['onDeselect', 'getPopupContainer',
   'multiple', 'filterOption', 'allowClear', 'combobox', 'searchPlaceholder',
-  'tags', 'disabled', 'showSearch', 'placeholder', 'optionLabelProp',
+  'tags', 'disabled', 'showSearch', 'placeholder', 'optionLabelProp', 'optionFilterProp',
   'maxTagTextLength', 'dropdownMatchSelectWidth', 'dropdownClassName', 'dropdownAlign',
   'notFoundContent', 'labelInValue', 'defaultActiveFirstOption', 'onFocus', 'onBlur'];
 
