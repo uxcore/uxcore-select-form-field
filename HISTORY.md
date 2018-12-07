@@ -1,3 +1,7 @@
+## 0.4.12
+
+* `FIXED` optionTextRender lost optionFilterProp
+
 ## 0.4.11
 * `CHANGED` add prop optionTextRender; add default dropdownAlign prop value to support tr,br align
 
