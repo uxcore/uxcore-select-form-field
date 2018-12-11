@@ -1,3 +1,7 @@
+## 0.4.13
+
+* `CHANGED` props.dropdownAlign.points from ['tr', 'br', 'tl', 'bl'] to  ['tl', 'bl', 'tr', 'br']
+
 ## 0.4.12
 
 * `FIXED` optionTextRender lost optionFilterProp
