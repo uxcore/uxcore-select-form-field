@@ -378,11 +378,11 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   useValueText: false,
   method: 'GET',
   dropdownAlign: {
-    points: ['tr', 'br', 'tl', 'bl'],
+    points: ['tl', 'bl', 'tr', 'br'],
     offset: [0, 4],
     overflow: {
-      adjustX: 1,
-      adjustY: 1,
+      adjustX: true,
+      adjustY: true,
     },
   },
   optionTextRender: text => text,

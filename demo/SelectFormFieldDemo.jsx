@@ -153,12 +153,33 @@ class Demo extends React.Component {
           </FormRow>
           <FormRow>
             <OtherFormField />
-            <OtherFormField />
             <SelectFormField
               ref={(r) => { this.selectRefs.select3 = r; }}
               jsxstyle={{ width: '300px' }}
               jsxlabel="长选项自适应"
               jsxname="select3"
+              allowClear
+              dropdownClassName="select-dropdown-max-width"
+              dropdownMatchSelectWidth={false}
+              jsxrules={{ validator: Validators.isNotEmpty, errMsg: '不能为空' }}
+              disabled={false}
+              jsxdata={me.state.jsxdata2}
+              optionTextRender={(text) => {
+                return <p style={{ whiteSpace: 'normal' }}>{text}</p>;
+              }}
+              onFocus={() => { console.log('focus'); }}
+              onBlur={() => { console.log('blur'); }}
+            />
+            <OtherFormField />
+          </FormRow>
+          <FormRow>
+            <OtherFormField />
+            <OtherFormField />
+            <SelectFormField
+              ref={(r) => { this.selectRefs.select7 = r; }}
+              jsxstyle={{ width: '300px' }}
+              jsxlabel="长选项自适应"
+              jsxname="select7"
               allowClear
               dropdownClassName="select-dropdown-max-width"
               dropdownMatchSelectWidth={false}
