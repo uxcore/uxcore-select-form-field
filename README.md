@@ -26,4 +26,4 @@ http://uxcore.coding.me/
 
 | 配置项 | 类型 | 必填 | 默认值 | 功能/备注 |
 |---|---|---|---|---|
-|  | 类型 | 必填 | 默认值 | 功能/备注 |
+| renderView | func | N | undefined | 自定义 VIEW 模式下的 value 渲染，回调时会回传当前已选中的项目，值全部是 [{ value, text }] 格式 |

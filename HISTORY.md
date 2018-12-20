@@ -1,3 +1,8 @@
+## 0.4.14
+
+* `NEW` new prop renderView, which should be a user defined function to render selected options under view mode
+* `CHANGED` implement all available props supported by rc-select
+
 ## 0.4.13
 
 * `CHANGED` props.dropdownAlign.points from ['tr', 'br', 'tl', 'bl'] to  ['tl', 'bl', 'tr', 'br']
