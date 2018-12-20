@@ -17,11 +17,48 @@ import util from './util';
 const { processData, transferDataToObj, getValuePropValue } = util;
 
 const { Option } = Select;
-const selectOptions = ['onDeselect', 'getPopupContainer',
-  'multiple', 'filterOption', 'allowClear', 'combobox', 'searchPlaceholder',
-  'tags', 'disabled', 'showSearch', 'placeholder', 'optionLabelProp', 'optionFilterProp',
-  'maxTagTextLength', 'dropdownMatchSelectWidth', 'dropdownClassName', 'dropdownAlign',
-  'notFoundContent', 'labelInValue', 'defaultActiveFirstOption', 'onFocus', 'onBlur'];
+const selectOptions = [
+  'allowClear',
+  'autoClearSearchValue',
+  'autoFocus',
+  'backfill',
+  'combobox',
+  'defaultActiveFirstOption',
+  'defaultOpen',
+  'disabled',
+  'dropdownAlign',
+  'dropdownClassName',
+  'dropdownMatchSelectWidth',
+  'dropdownMenuStyle',
+  'dropdownRender',
+  'dropdownStyle',
+  'filterOption',
+  'firstActiveValue',
+  'getInputElement',
+  'getPopupContainer',
+  'labelInValue',
+  'loading',
+  'maxTagCount',
+  'maxTagPlaceholder',
+  'maxTagTextLength',
+  'menuItemSelectedIcon',
+  'multiple',
+  'notFoundContent',
+  'onBlur',
+  'onDeselect',
+  'onFocus',
+  'onInputKeyDown',
+  'onPopupScroll',
+  'open',
+  'optionFilterProp',
+  'optionLabelProp',
+  'placeholder',
+  'searchPlaceholder',
+  'showAction',
+  'showArrow',
+  'showSearch',
+  'tags',
+];
 
 class SelectFormField extends FormField {
   static getDerivedStateFromProps = (props, state) => {
@@ -64,6 +101,8 @@ class SelectFormField extends FormField {
 
   /**
    * select inner method is used, not very reliable
+   * 
+   * @deprecated
    */
   resetSelect() {
     const me = this;
@@ -71,13 +110,9 @@ class SelectFormField extends FormField {
     if (multiple && closeOnSelect) {
       if (typeof me.select.setInputValue === 'function') {
         me.select.setInputValue('');
-      } else {
-        console.warn('select.setInputValue is invalid');
       }
       if (typeof me.select.setOpenState === 'function') {
         me.select.setOpenState(false, false);
-      } else {
-        console.warn('select.setOpenState is invalid');
       }
     }
   }
@@ -290,34 +325,60 @@ class SelectFormField extends FormField {
       /* eslint-enable no-underscore-dangle */
     } else if (mode === Constants.MODE.VIEW) {
       let str = '';
+      const renderValues = [];
       const splitter = ', \u00a0';
       if (me.state.value) {
         const value = me.processValue();
         const values = !Array.isArray(value) ? [value] : value;
-        // labelInValue mode
         if (me.props.jsxfetchUrl || me.props.onSearch || me.props.labelInValue) {
-          str = values.map(item => (item.label || item.key)).join(splitter);
+          // labelInValue mode
+          str = values.map((item) => {
+            const label = item.label || item.key;
+
+            renderValues.push({
+              value: item.key,
+              text: label,
+            });
+
+            return label;
+          }).join(splitter);
         } else if (me.props.children) {
           // <Option> mode
-          if (me.props.children) {
-            me.props.children.forEach((child) => {
-              const valuePropValue = getValuePropValue(child);
-              if (values.indexOf(valuePropValue) !== -1) {
-                str += `${child.props[me.props.optionLabelProp]} `;
-              }
-            });
-            if (str === '') {
-              str = values.join(splitter);
+          const optionsLabel = [];
+          me.props.children.forEach((child) => {
+            const valuePropValue = getValuePropValue(child);
+            if (values.indexOf(valuePropValue) !== -1) {
+              const label = `${child.props[me.props.optionLabelProp]}`;
+
+              optionsLabel.push(label);
+
+              renderValues.push({
+                value: valuePropValue,
+                text: label,
+              });
             }
-          }
+          });
+
+          str = optionsLabel.length ? optionsLabel.join(splitter) : values.join(splitter);
         } else {
           // only jsxdata
           str = values.map((item) => {
             const label = transferDataToObj(me.state.data)[item === '' ? '__all__' : item];
+
+            renderValues.push({
+              value: item,
+              text: label || item,
+            });
+
             return label || item;
           }).join(splitter);
         }
       }
+
+      if (me.props.renderView) {
+        str = me.props.renderView(renderValues);
+      }
+
       arr.push(
         <span key="select">
           {str}
@@ -353,6 +414,7 @@ SelectFormField.propTypes = assign({}, FormField.propTypes, {
   method: PropTypes.string,
   dropdownAlign: PropTypes.object,
   optionTextRender: PropTypes.func,
+  renderView: PropTypes.func,
 });
 
 SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
@@ -386,6 +448,7 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
     },
   },
   optionTextRender: text => text,
+  renderView: undefined,
 });
 
 export default SelectFormField;

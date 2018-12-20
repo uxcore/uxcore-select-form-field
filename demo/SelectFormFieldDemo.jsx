@@ -107,10 +107,12 @@ class Demo extends React.Component {
               jsxlabel="长选项截断"
               jsxname="select1"
               allowClear
-              dropdownClassName="select-dropdown-max-width"
+              multiple
+              dropdownStyle={{ maxWidth: 500 }}
               dropdownMatchSelectWidth={false}
               jsxrules={{ validator: Validators.isNotEmpty, errMsg: '不能为空' }}
               disabled={false}
+              showSearch={false}
               jsxdata={me.state.jsxdata2}
               optionTextRender={(text) => {
                 let shortText = text;
@@ -207,6 +209,7 @@ class Demo extends React.Component {
             closeOnSelect
             onSelect={(...args) => { console.log(...args); }}
             jsxname="select5"
+            jsxtips="使用 renderView 渲染 VIEW 模式"
             multiple
             jsxfetchUrl="http://suggest.taobao.com/sug"
             dataType="jsonp"
@@ -224,16 +227,20 @@ class Demo extends React.Component {
               });
               return data;
             }}
+            renderView={(values) => {
+              return values.map(v => (<a
+                key={v.value}
+                href={`https://s.taobao.com/search?q=${v.text}`}
+                target="_blank"
+                style={{ margin: 5 }}
+              >
+                {v.text}
+              </a>));
+            }}
           />
         </Form>
         <Button onClick={me.handleModeChange.bind(me)}>
           切换模式
-        </Button>&nbsp;
-        <Button onClick={me.handleOptionChange.bind(me)}>
-          更改选项
-        </Button>&nbsp;
-        <Button onClick={() => { me.handleClear(); }}>
-          清空值
         </Button>
       </div>
     );
