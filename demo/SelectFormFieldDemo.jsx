@@ -107,6 +107,7 @@ class Demo extends React.Component {
               jsxlabel="长选项截断"
               jsxname="select1"
               allowClear
+              multiple
               dropdownStyle={{ maxWidth: 500 }}
               dropdownMatchSelectWidth={false}
               jsxrules={{ validator: Validators.isNotEmpty, errMsg: '不能为空' }}
@@ -227,7 +228,14 @@ class Demo extends React.Component {
               return data;
             }}
             renderView={(values) => {
-              return values.map(v => <a href={`https://s.taobao.com/search?q=${v.label}`} target="_blank" style={{ marginRight: 10 }}>{v.label}</a>);
+              return values.map(v => (<a
+                key={v.value}
+                href={`https://s.taobao.com/search?q=${v.text}`}
+                target="_blank"
+                style={{ margin: 5 }}
+              >
+                {v.text}
+              </a>));
             }}
           />
         </Form>

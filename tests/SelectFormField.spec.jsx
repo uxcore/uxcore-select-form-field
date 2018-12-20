@@ -233,7 +233,7 @@ describe('SelectFormField', () => {
       </Form>,
     );
     expect(wrapper.find('SelectFormField').find('.view-mode').find('.kuma-uxform-field-core').find('span')
-      .text()).to.be.equal('北京 ');
+      .text()).to.be.equal('北京');
     done();
   });
 
@@ -347,6 +347,27 @@ describe('SelectFormField', () => {
     dropdownWrapper.find('li').at(1).simulate('click');
     const fundata = selectInstance.getFullData();
     expect(fundata.length).to.be.equal(2);
+    done();
+  });
+
+  it('should support renderView', (done) => {
+    const data = {
+      bj: '北京',
+      sh: '上海',
+    };
+
+    const wrapper = mount(
+      <Form jsxvalues={{ test: 'bj' }} jsxmode={Constants.MODE.VIEW}>
+        <SelectFormField
+          jsxshowSearch
+          jsxname="test"
+          jsxlabel="test"
+          jsxdata={data}
+          renderView={values => values.map(v => v.text).join(', ')}
+        />
+      </Form>,
+    );
+    expect(wrapper.find('.view-mode').find('.kuma-uxform-field-core').find('span').text()).to.be.equal('北京');
     done();
   });
 });
