@@ -53,6 +53,7 @@ const selectOptions = [
   'optionFilterProp',
   'optionLabelProp',
   'placeholder',
+  'rcRef',
   'searchPlaceholder',
   'showAction',
   'showArrow',
