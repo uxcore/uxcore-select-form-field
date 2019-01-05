@@ -1,3 +1,7 @@
+## 0.4.15
+
+* `NEW` pass new prop rcRef to uxcore-select2, so we can get the inside RcSelect ref in case need to call it's public methods
+
 ## 0.4.14
 
 * `NEW` new prop renderView, which should be a user defined function to render selected options under view mode
