@@ -1,3 +1,7 @@
+## 0.4.16
+
+* `NEW` add loadingView while fetching data from remote source； bump up test coverage over 90%
+
 ## 0.4.15
 
 * `NEW` pass new prop rcRef to uxcore-select2, so we can get the inside RcSelect ref in case need to call it's public methods
