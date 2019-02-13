@@ -15,6 +15,18 @@ import find from 'lodash/find';
 import util from './util';
 
 const { processData, transferDataToObj, getValuePropValue } = util;
+const defaultLabels = {
+  placeholder: {
+    'zh-cn': '请下拉选择',
+    'en-us': 'Please select',
+    en: 'Please select',
+  },
+  notFoundContent: {
+    'zh-cn': '未查询到备选项',
+    'en-us': 'No Options Found',
+    en: 'No Options Found',
+  },
+};
 
 const { Option } = Select;
 const selectOptions = [
@@ -105,46 +117,63 @@ class SelectFormField extends FormField {
    * 
    * @deprecated
    */
+  /* eslint-disable */
   resetSelect() {
-    const me = this;
-    const { multiple, closeOnSelect } = me.props;
-    if (multiple && closeOnSelect) {
-      if (typeof me.select.setInputValue === 'function') {
-        me.select.setInputValue('');
-      }
-      if (typeof me.select.setOpenState === 'function') {
-        me.select.setOpenState(false, false);
-      }
-    }
+    console.warn('Method resetSelect is deprecated'); 
   }
+  /* eslint-enable */
 
   fetchData(value) {
-    const me = this;
-    if (me.fetch) {
-      me.fetch.abort();
+    if (this.fetch) {
+      this.fetch.abort();
     }
-    me.fetch = NattyFetch.create({
-      url: me.props.jsxfetchUrl,
-      jsonp: me.props.dataType
-        ? me.props.dataType === 'jsonp'
-        : (/\.jsonp/.test(me.props.jsxfetchUrl)),
-      data: me.props.beforeFetch({
+
+    const formerData = this.state.data;
+
+    this.setState({
+      data: [],
+      loading: true,
+    });
+
+    const {
+      jsxfetchUrl,
+      dataType,
+      beforeFetch,
+      afterFetch,
+      method,
+      fitResponse,
+      jsxdata,
+    } = this.props;
+
+    this.fetch = NattyFetch.create({
+      url: jsxfetchUrl,
+      jsonp: dataType
+        ? dataType === 'jsonp'
+        : (/\.jsonp/.test(jsxfetchUrl)),
+      data: beforeFetch({
         q: value,
       }),
-      method: me.props.method,
-      fit: me.props.fitResponse,
+      method,
+      fit: fitResponse,
       Promise,
     });
-    me.fetch().then((content) => {
-      let fetchData = processData(me.props.afterFetch(content));
-      if (me.props.jsxdata) {
-        fetchData = processData(me.props.jsxdata).concat(fetchData);
+
+    this.fetch().then((content) => {
+      let fetchData = processData(afterFetch(content));
+      if (jsxdata) {
+        fetchData = processData(jsxdata).concat(fetchData);
       }
-      me.setState({
+      this.setState({
         data: fetchData,
+        loading: false,
       });
     }).catch((e) => {
       console.error(e.stack);
+
+      this.setState({
+        data: formerData,
+        loading: false,
+      });
     });
   }
 
@@ -273,6 +302,13 @@ class SelectFormField extends FormField {
     const arr = [];
     const mode = me.props.jsxmode || me.props.mode;
 
+    let safeLocale = me.props.locale || 'zh-cn';
+    if (['zh-cn', 'en', 'en-us'].indexOf(safeLocale) === -1) {
+      safeLocale = 'zh-cn';
+    }
+
+    const loadingView = <div className="kuma-loading-s kuma-select-uxform-options-loading" />;
+
     if (mode === Constants.MODE.EDIT) {
       const options = {
         ref: (c) => { this.select = c; },
@@ -285,11 +321,10 @@ class SelectFormField extends FormField {
         tags: me.props.jsxtags,
         disabled: !!me.props.jsxdisabled,
         showSearch: me.props.jsxshowSearch,
-        placeholder: me.props.jsxplaceholder,
+        placeholder: me.props.jsxplaceholder || defaultLabels.placeholder[safeLocale],
         onChange: me.handleChange.bind(me),
         onSearch: me.handleSearch.bind(me),
         onSelect: (...args) => {
-          this.resetSelect();
           if (this.props.onSelect) {
             this.props.onSelect(...args);
           }
@@ -307,6 +342,14 @@ class SelectFormField extends FormField {
         }
       });
 
+      if (!{}.hasOwnProperty.call(me.props, 'notFoundContent')) {
+        options.notFoundContent = defaultLabels.notFoundContent[safeLocale];
+      }
+
+      if (me.state.loading) {
+        options.notFoundContent = me.props.loadingView || loadingView;
+      }
+
       // only jsxfetchUrl mode need pass label, for the options always change.
       // when mount, state.label is undefined, which cause defalutValue cannot be used.
       if (me.props.jsxfetchUrl || me.props.onSearch) {
@@ -314,7 +357,6 @@ class SelectFormField extends FormField {
       }
 
       options.value = me.processValue() || [];
-
 
       /* eslint-disable no-underscore-dangle */
       /* used in SearchFormField */
@@ -416,11 +458,12 @@ SelectFormField.propTypes = assign({}, FormField.propTypes, {
   dropdownAlign: PropTypes.object,
   optionTextRender: PropTypes.func,
   renderView: PropTypes.func,
+  loadingView: PropTypes.node,
 });
 
 SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   jsxstyle: {},
-  jsxplaceholder: '请下拉选择',
+  jsxplaceholder: undefined,
   jsxcombobox: false,
   jsxdata: {},
   searchDelay: 100,
@@ -450,6 +493,7 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   },
   optionTextRender: text => text,
   renderView: undefined,
+  loadingView: undefined,
 });
 
 export default SelectFormField;

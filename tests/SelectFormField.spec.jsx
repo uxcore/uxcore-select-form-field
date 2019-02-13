@@ -12,6 +12,46 @@ const { Option } = SelectFormField;
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('SelectFormField', () => {
+  it('should support default lables with safe locales', () => {
+    const data = [
+      { key: 'bj', label: '北京' },
+      { key: 'sh', label: '上海' },
+    ];
+    const wrapper = mount(
+      <Form>
+        <SelectFormField
+          locale="xx-xx"
+          jsxshowSearch
+          onSearch={() => { }}
+          jsxname="test"
+          jsxlabel="test"
+          jsxdata={data}
+        />
+      </Form>,
+    );
+    expect(wrapper.find('.kuma-select2-selection__placeholder').text()).to.be('请下拉选择');
+  });
+
+  it('should support default lables', () => {
+    const data = [
+      { key: 'bj', label: '北京' },
+      { key: 'sh', label: '上海' },
+    ];
+    const wrapper = mount(
+      <Form>
+        <SelectFormField
+          locale="en"
+          jsxshowSearch
+          onSearch={() => { }}
+          jsxname="test"
+          jsxlabel="test"
+          jsxdata={data}
+        />
+      </Form>,
+    );
+    expect(wrapper.find('.kuma-select2-selection__placeholder').text()).to.be('Please select');
+  });
+
   it('should support value is {key, label}', () => {
     const data = [
       { key: 'bj', label: '北京' },
@@ -305,6 +345,7 @@ describe('SelectFormField', () => {
         <SelectFormField
           ref={(select) => {
             selectInstance = select;
+            select.resetSelect();
           }}
           jsxshowSearch
           jsxname="test"
@@ -369,5 +410,42 @@ describe('SelectFormField', () => {
     );
     expect(wrapper.find('.view-mode').find('.kuma-uxform-field-core').find('span').text()).to.be.equal('北京');
     done();
+  });
+
+  it('should support fetchData', (done) => {
+    const wrapper = mount(
+      <Form jsxvalues={{ test: 'aj' }}>
+        <SelectFormField
+          jsxshowSearch
+          jsxname="test"
+          jsxlabel="test"
+          jsxfetchUrl="http://suggest.taobao.com/sug"
+          dataType="jsonp"
+          beforeFetch={(data) => {
+            const newData = { ...data };
+            if (newData.q === undefined) {
+              newData.q = 'a';
+            }
+            return newData;
+          }}
+          afterFetch={(obj) => {
+            const data = {};
+            obj.result.forEach((item) => {
+              data[item[1]] = item[0];
+            });
+            return data;
+          }}
+          renderView={values => values.map(v => v.text).join(', ')}
+        />
+      </Form>,
+    );
+    expect(wrapper.find('.kuma-select2-selection-selected-value').text()).to.be.equal('aj');
+    const input = wrapper.find('.kuma-select2-search__field');
+    input.simulate('focus');
+    input.simulate('change', { target: { value: 'aj' } });
+    input.simulate('change', { target: { value: 'as' } });
+    setTimeout(() => {
+      done();
+    }, 200);
   });
 });
