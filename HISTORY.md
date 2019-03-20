@@ -1,3 +1,7 @@
+## 0.4.17
+
+* `NEW` add prop valueStrictMode
+
 ## 0.4.16
 
 * `NEW` add loadingView while fetching data from remote source； bump up test coverage over 90%

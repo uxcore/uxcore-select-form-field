@@ -97,10 +97,26 @@ class Demo extends React.Component {
       <div style={{ margin: 50 }}>
         <Form
           jsxmode={me.state.mode}
-          jsxvalues={{ city: this.state.value, city2: '*' }}
+          jsxvalues={{ numberSelect: 2, city: this.state.value, city2: '*', select4: 'nj', select5: 'aj1' }}
           jsxonChange={this.change}
         >
           <FormRow>
+            <SelectFormField
+              ref={(r) => { this.selectRefs.numberSelect = r; }}
+              jsxlabel="数字 VALUE"
+              jsxname="numberSelect"
+              jsxdata={[{
+                text: '1111111',
+                value: 1,
+              }, {
+                text: '2222222',
+                value: 2,
+              }, {
+                text: '3333333',
+                value: 3,
+              }]}
+              valueStrictMode
+            />
             <SelectFormField
               ref={(r) => { this.selectRefs.select1 = r; }}
               jsxstyle={{ width: '300px' }}

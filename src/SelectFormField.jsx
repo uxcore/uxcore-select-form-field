@@ -219,7 +219,7 @@ class SelectFormField extends FormField {
   _generateOptionsFromData() {
     const me = this;
     const values = me.state.data;
-    const { children, optionTextRender } = me.props;
+    const { children, optionTextRender, valueStrictMode } = me.props;
     if (!values.length) {
       if (children) {
         return children;
@@ -227,6 +227,10 @@ class SelectFormField extends FormField {
     }
     const arr = values.map((item) => {
       const { value, text, ...others } = item;
+      if (valueStrictMode) {
+        others.value = value;
+      }
+
       return (
         <Option key={value} title={text} {...others}>
           {optionTextRender ? optionTextRender(item.text, item) : item.text}
@@ -459,6 +463,7 @@ SelectFormField.propTypes = assign({}, FormField.propTypes, {
   optionTextRender: PropTypes.func,
   renderView: PropTypes.func,
   loadingView: PropTypes.node,
+  valueStrictMode: PropTypes.bool,
 });
 
 SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
@@ -494,6 +499,7 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   optionTextRender: text => text,
   renderView: undefined,
   loadingView: undefined,
+  valueStrictMode: false,
 });
 
 export default SelectFormField;
