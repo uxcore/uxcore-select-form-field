@@ -362,6 +362,96 @@ describe('SelectFormField', () => {
     done();
   });
 
+  it('should support getFullData with object parameter', (done) => {
+    let selectInstance;
+    const data = {
+      bj: '北京',
+      sh: '上海',
+    };
+
+    const wrapper = mount(
+      <Form>
+        <SelectFormField
+          ref={(select) => {
+            selectInstance = select;
+            select.resetSelect();
+          }}
+          jsxshowSearch
+          jsxname="test"
+          jsxlabel="test"
+          jsxdata={data}
+        />
+      </Form>,
+    );
+    wrapper.find('SelectFormField').find('.kuma-select2-arrow').simulate('click');
+    const dropdownWrapper = mount(wrapper.find('SelectFormField').find('Trigger').instance().getComponent());
+    dropdownWrapper.find('li').at(0).simulate('click');
+    const fundata = selectInstance.getFullData({ key: 'sh', label: '上海' });
+    expect(fundata.value).to.be.equal('sh');
+    done();
+  });
+
+  it('should support getFullData with array parameter', (done) => {
+    let selectInstance;
+    const data = {
+      bj: '北京',
+      sh: '上海',
+    };
+
+    const wrapper = mount(
+      <Form>
+        <SelectFormField
+          ref={(select) => {
+            selectInstance = select;
+            select.resetSelect();
+          }}
+          jsxshowSearch
+          jsxname="test"
+          jsxlabel="test"
+          jsxdata={data}
+        />
+      </Form>,
+    );
+    wrapper.find('SelectFormField').find('.kuma-select2-arrow').simulate('click');
+    const dropdownWrapper = mount(wrapper.find('SelectFormField').find('Trigger').instance().getComponent());
+    dropdownWrapper.find('li').at(0).simulate('click');
+    const fundata = selectInstance.getFullData([
+      { key: 'sh', label: '上海' },
+      { key: 'bj', label: '北京' },
+    ]);
+    expect(fundata.length).to.be.equal(2);
+    done();
+  });
+
+  it('should support getFullData with string parameter', (done) => {
+    let selectInstance;
+    const data = {
+      bj: '北京',
+      sh: '上海',
+    };
+
+    const wrapper = mount(
+      <Form>
+        <SelectFormField
+          ref={(select) => {
+            selectInstance = select;
+            select.resetSelect();
+          }}
+          jsxshowSearch
+          jsxname="test"
+          jsxlabel="test"
+          jsxdata={data}
+        />
+      </Form>,
+    );
+    wrapper.find('SelectFormField').find('.kuma-select2-arrow').simulate('click');
+    const dropdownWrapper = mount(wrapper.find('SelectFormField').find('Trigger').instance().getComponent());
+    dropdownWrapper.find('li').at(0).simulate('click');
+    const fundata = selectInstance.getFullData('bj');
+    expect(fundata.value).to.be.equal('bj');
+    done();
+  });
+
   it('should support getFullData with array', (done) => {
     let selectInstance;
     const data = [
