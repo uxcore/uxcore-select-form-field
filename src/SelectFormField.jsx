@@ -245,9 +245,9 @@ class SelectFormField extends FormField {
    * 多选时返回数组，单选时返回 object
    * 新增 value is object。
    */
-  getFullData(items) {
+  getFullData(changedValue) {
     const { data, value } = this.state;
-    const selectedItems = items || value;
+    const selectedItems = changedValue || value;
     if (Array.isArray(selectedItems)) {
       return selectedItems.map((selectItem) => {
         if (isObject(selectItem)) {
