@@ -1,3 +1,6 @@
+## 0.4.18
+* `FIXED` fix a check logic
+
 ## 0.4.17
 
 * `NEW` add prop valueStrictMode
@@ -62,7 +65,7 @@
 
 ## 0.3.19
 
-* `FIXED` jsxonChange cannot fire correctly 
+* `FIXED` jsxonChange cannot fire correctly
 
 ## 0.3.16
 
@@ -122,7 +125,7 @@
 
 ## 0.2.4
 
-* `FIXED` me.props.handleDataChange is not silent when value change. 
+* `FIXED` me.props.handleDataChange is not silent when value change.
 
 ## 0.2.2
 
@@ -144,7 +147,7 @@
 
 ## 0.1.9
 
-* `CHANGED` pass `labelInValue` to Select 
+* `CHANGED` pass `labelInValue` to Select
 
 ## 0.1.8
 
