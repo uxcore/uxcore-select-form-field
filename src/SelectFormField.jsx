@@ -114,12 +114,12 @@ class SelectFormField extends FormField {
 
   /**
    * select inner method is used, not very reliable
-   * 
+   *
    * @deprecated
    */
   /* eslint-disable */
   resetSelect() {
-    console.warn('Method resetSelect is deprecated'); 
+    console.warn('Method resetSelect is deprecated');
   }
   /* eslint-enable */
 
@@ -189,8 +189,7 @@ class SelectFormField extends FormField {
           value: item.key,
           text: item.label,
         }));
-      }
-      if (typeof value === 'object' && value !== null) {
+      } else if (typeof value === 'object' && value !== null) {
         newValue = {
           value: value.key,
           text: value.label,
