@@ -1,3 +1,6 @@
+## 0.4.19
+* `CHANGED` add new prop fetchHeader
+
 ## 0.4.18
 * `FIXED` fix a check logic
 

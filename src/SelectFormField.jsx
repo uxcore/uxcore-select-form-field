@@ -141,6 +141,8 @@ class SelectFormField extends FormField {
       beforeFetch,
       afterFetch,
       method,
+      fetchMethod,
+      fetchHeader,
       fitResponse,
       jsxdata,
     } = this.props;
@@ -153,7 +155,8 @@ class SelectFormField extends FormField {
       data: beforeFetch({
         q: value,
       }),
-      method,
+      method: fetchMethod || method,
+      header: fetchHeader,
       fit: fitResponse,
       Promise,
     });
@@ -458,6 +461,8 @@ SelectFormField.propTypes = assign({}, FormField.propTypes, {
   fetchDataOnMount: PropTypes.bool,
   useValueText: PropTypes.bool,
   method: PropTypes.string,
+  fetchMethod: PropTypes.string,
+  fetchHeader: PropTypes.object,
   dropdownAlign: PropTypes.object,
   optionTextRender: PropTypes.func,
   renderView: PropTypes.func,
@@ -487,6 +492,8 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   fetchDataOnMount: true,
   useValueText: false,
   method: 'GET',
+  fetchMethod: 'GET', // 替代method
+  fetchHeader: {},
   dropdownAlign: {
     points: ['tl', 'bl', 'tr', 'br'],
     offset: [0, 4],
