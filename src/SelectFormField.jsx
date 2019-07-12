@@ -492,7 +492,7 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   fetchDataOnMount: true,
   useValueText: false,
   method: 'GET',
-  fetchMethod: 'GET', // 替代method
+  fetchMethod: '', // 替代method
   fetchHeader: {},
   dropdownAlign: {
     points: ['tl', 'bl', 'tr', 'br'],

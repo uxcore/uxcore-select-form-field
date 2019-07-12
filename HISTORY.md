@@ -1,3 +1,6 @@
+## 0.4.20
+* `CHANGED` fix a bug when fetchMethod is not set
+
 ## 0.4.19
 * `CHANGED` add new prop fetchHeader
 
