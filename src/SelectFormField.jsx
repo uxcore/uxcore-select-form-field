@@ -147,7 +147,7 @@ class SelectFormField extends FormField {
       jsxdata,
     } = this.props;
 
-    this.fetch = NattyFetch.create({
+    const param = {
       url: jsxfetchUrl,
       jsonp: dataType
         ? dataType === 'jsonp'
@@ -156,10 +156,13 @@ class SelectFormField extends FormField {
         q: value,
       }),
       method: fetchMethod || method,
-      header: fetchHeader,
       fit: fitResponse,
       Promise,
-    });
+    }
+    if (fetchHeader) {
+      param.header = fetchHeader
+    }
+    this.fetch = NattyFetch.create(param);
 
     this.fetch().then((content) => {
       let fetchData = processData(afterFetch(content));
@@ -492,8 +495,8 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   fetchDataOnMount: true,
   useValueText: false,
   method: 'GET',
-  fetchMethod: '', // 替代method
-  fetchHeader: {},
+  fetchMethod: undefined,
+  fetchHeader: undefined,
   dropdownAlign: {
     points: ['tl', 'bl', 'tr', 'br'],
     offset: [0, 4],
