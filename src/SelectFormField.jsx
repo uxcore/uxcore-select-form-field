@@ -433,7 +433,7 @@ class SelectFormField extends FormField {
 
       arr.push(
         <span key="select">
-          {str}
+          {str || '--'}
         </span>,
       );
     }
