@@ -1,4 +1,4 @@
-## 0.4.23
+## 0.4.24
 * `CHANGE` add title which is different with label for option
 
 ## 0.4.20
