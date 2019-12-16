@@ -97,7 +97,7 @@ class Demo extends React.Component {
       <div style={{ margin: 50 }}>
         <Form
           jsxmode={me.state.mode}
-          jsxvalues={{ numberSelect: 2, city: this.state.value, city2: '*', select4: 'nj', select5: 'aj1' }}
+          jsxvalues={{ numberSelect: 2, city: this.state.value, city2: '*', select4: 'nj', select5: {key: 11, label: '222', title: '22233'}}}
           jsxonChange={this.change}
         >
           <FormRow>

@@ -1,3 +1,6 @@
+## 0.4.23
+* `CHANGE` add title which is different with label for option
+
 ## 0.4.20
 * `CHANGED` fix a bug when fetchMethod is not set
 

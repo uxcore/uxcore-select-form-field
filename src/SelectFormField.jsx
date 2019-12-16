@@ -293,6 +293,7 @@ class SelectFormField extends FormField {
       return {
         key: newValue.value || newValue.key,
         label: newValue.text || newValue.label,
+        title: newValue.title || newValue.text || newValue.label
       };
     }
     return newValue;

@@ -10,6 +10,7 @@ const processData = (data) => {
     values = keys.map(key => ({
       value: key,
       text: data[key],
+      title: data.title || data.label || data.text
     }));
   } else {
     values = data.map((item) => {
@@ -17,6 +18,7 @@ const processData = (data) => {
         ...item,
         value: item.key || item.value,
         text: item.label || item.text,
+        title: item.title || item.label || item.text
       };
       ['key', 'label'].forEach((key) => {
         delete newItem[key];
