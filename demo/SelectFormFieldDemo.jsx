@@ -31,7 +31,6 @@ class Demo extends React.Component {
         { value: 'bj', text: '蚂蚁金服-支付宝事业群-支付宝技术部-商家及开放技术部-商家开放质量技术部-开放与平台质量技术部-开放与平台基础质量组-开放与平台基础质量组' },
         { value: 'nj2', text: '蚂蚁金服-支付宝事业群-支付宝技术部-商家及开放技术部-商家开放质量技术部-开放与平台质量技术部-开放与平台基础质量组-尖刀质量技术组' },
         { value: 'nj3', text: '蚂蚁金服-支付宝事业群-支付宝技术部-商家及开放技术部-商家开放质量技术部-开放与平台质量技术部-开放与平台基础质量组-开放渠道与运营中台质量组' },
-        { value: 'long', text: '蚂蚁金服-支付宝事业群-支付宝技术部-商家及开放技术部-商家开放质量技术部-开放与平台质量技术部-开放与平台基础质量组-产品平台与开发者中心质量组' },
       ],
       mode: Constants.MODE.EDIT,
       value: 'aaa',
@@ -144,6 +143,34 @@ class Demo extends React.Component {
           </FormRow>
           <FormRow>
             <SelectFormField
+              jsxlabel="搜索提示"
+              jsxname="select6"
+              ref={(r) => { this.selectRefs.select6 = r; }}
+              jsxstyle={{ width: '300px' }}
+              jsxtips={<a href="https://www.foo.bar" target="_blank" rel="noopener noreferrer">如果为找到需要的数据，请点击这里反馈</a>}
+              fetchSizeOptions={{
+                size: 10,
+              }}
+              jsxfetchUrl="http://suggest.taobao.com/sug" // 这个 mock 不支持 size
+              dataType="jsonp"
+              beforeFetch={(data) => {
+                const newData = { ...data };
+                if (newData.q === undefined) {
+                  newData.q = 'a';
+                }
+                return newData;
+              }}
+              afterFetch={(obj) => {
+                const data = {};
+                obj.result.forEach((item) => {
+                  data[item[1]] = item[0];
+                });
+                return data;
+              }}
+            />
+          </FormRow>
+          <FormRow>
+            <SelectFormField
               ref={(r) => { this.selectRefs.select2 = r; }}
               jsxstyle={{ width: '300px' }}
               jsxlabel="长选项换行"
@@ -225,7 +252,7 @@ class Demo extends React.Component {
             closeOnSelect
             onSelect={(...args) => { console.log(...args); }}
             jsxname="select5"
-            jsxtips="使用 renderView 渲染 VIEW 模式"
+            jsxtips="填写提示信息"
             multiple
             jsxfetchUrl="http://suggest.taobao.com/sug"
             dataType="jsonp"
@@ -239,6 +266,7 @@ class Demo extends React.Component {
             afterFetch={(obj) => {
               const data = {};
               obj.result.forEach((item) => {
+                console.log(item[0]);
                 data[item[1]] = item[0];
               });
               return data;
