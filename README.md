@@ -38,7 +38,7 @@ http://uxcore.coding.me/
 
 ```javascript
 {
-  size: 10, // 如果需要开启提示特性，size 为必选
+  size: 10, // 如果需要开启提示特性，size 为必选。当接口返回的数据条数少于 size 时不会显示提示
   text: '默认仅展示 {count} 条数据，更多请输入关键字查询...', // 非必选，有默认文案
   style: {} // 需要覆盖提示 Option 样式时可传入
 }
