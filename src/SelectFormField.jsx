@@ -26,6 +26,11 @@ const defaultLabels = {
     'en-us': 'No Options Found',
     en: 'No Options Found',
   },
+  searchTips: {
+    'zh-cn': '仅展示 {count} 条记录。若未找到，请试试输入关键字搜索...',
+    'en-us': 'Only show {count} options by default, enter keywords to search for more...',
+    en: 'Only show {count} options by default, enter keywords to search for more...',
+  },
 };
 
 const { Option } = Select;
@@ -74,7 +79,7 @@ const selectOptions = [
 ];
 
 class SelectFormField extends FormField {
-  static getDerivedStateFromProps = (props, state) => {
+  static getDerivedStateFromProps(props, state) {
     const baseUpdate = FormField.getDerivedStateFromProps(props, state);
     const { jsxdata } = props;
     if (!isEqual(jsxdata, state.prevPropsData)) {
@@ -89,9 +94,18 @@ class SelectFormField extends FormField {
 
   constructor(props) {
     super(props);
-    const me = this;
-    const { jsxdata } = props;
-    assign(me.state, {
+
+    const {
+      jsxdata,
+      locale,
+    } = props;
+
+    this.safeLocale = 'zh-cn';
+    if (['zh-cn', 'en', 'en-us'].indexOf(locale) !== -1) {
+      this.safeLocale = locale;
+    }
+
+    assign(this.state, {
       data: processData(jsxdata),
       prevPropsData: jsxdata,
     });
@@ -138,29 +152,37 @@ class SelectFormField extends FormField {
     const {
       jsxfetchUrl,
       dataType,
+      searchKey = 'q',
       beforeFetch,
       afterFetch,
       method,
       fetchMethod,
       fetchHeader,
+      fetchSizeOptions,
       fitResponse,
       jsxdata,
     } = this.props;
+
+    const data = beforeFetch({
+      [searchKey]: value,
+    });
+    if (fetchSizeOptions && fetchSizeOptions.size) {
+      const key = fetchSizeOptions.key || 'size';
+      data[key] = fetchSizeOptions.size;
+    }
 
     const param = {
       url: jsxfetchUrl,
       jsonp: dataType
         ? dataType === 'jsonp'
         : (/\.jsonp/.test(jsxfetchUrl)),
-      data: beforeFetch({
-        q: value,
-      }),
+      data,
       method: fetchMethod || method,
       fit: fitResponse,
       Promise,
-    }
+    };
     if (fetchHeader) {
-      param.header = fetchHeader
+      param.header = fetchHeader;
     }
     this.fetch = NattyFetch.create(param);
 
@@ -208,29 +230,43 @@ class SelectFormField extends FormField {
   }
 
   handleSearch(value) {
-    const me = this;
-    if (me.searchTimer) {
-      clearTimeout(me.searchTimer);
+    const {
+      jsxfetchUrl,
+      onSearch,
+      searchDelay = 300,
+    } = this.props;
+
+    if (this.searchTimer) {
+      clearTimeout(this.searchTimer);
     }
-    me.searchTimer = setTimeout(() => {
-      if (me.props.jsxfetchUrl) {
-        me.fetchData(value);
-      } else if (me.props.onSearch) {
-        me.props.onSearch(value);
+
+    this.searchTimer = setTimeout(() => {
+      if (jsxfetchUrl) {
+        this.fetchData(value);
+      } else if (onSearch) {
+        onSearch(value);
       }
-    }, me.props.searchDelay);
+    }, searchDelay);
   }
 
+  /* eslint-disable no-underscore-dangle */
   _generateOptionsFromData() {
-    const me = this;
-    const values = me.state.data;
-    const { children, optionTextRender, valueStrictMode } = me.props;
-    if (!values.length) {
-      if (children) {
-        return children;
-      }
+    const {
+      optionTextRender,
+      valueStrictMode,
+      fetchSizeOptions,
+      children,
+    } = this.props;
+
+    const {
+      data: values,
+    } = this.state;
+
+    if ((!Array.isArray(values) || !values.length) && children) {
+      return children;
     }
-    const arr = values.map((item) => {
+
+    const options = values.map((item) => {
       const { value, text, ...others } = item;
       if (valueStrictMode) {
         others.value = value;
@@ -242,7 +278,20 @@ class SelectFormField extends FormField {
         </Option>
       );
     });
-    return arr;
+
+    // 在备选项最后加上一个 disabled 状态的提示选项
+    if (fetchSizeOptions && fetchSizeOptions.size && (values.length >= fetchSizeOptions.size)) {
+      const tipsText = fetchSizeOptions.text || defaultLabels.searchTips[this.safeLocale];
+      const tipsContent = `${tipsText}`.replace('{count}', fetchSizeOptions.size);
+      const tipsStyle = {
+        color: '#9e9e9e',
+        whiteSpace: 'normal',
+        ...fetchSizeOptions.style,
+      };
+      options.push(<Option disabled key="search-tips" style={tipsStyle}>{tipsContent}</Option>);
+    }
+
+    return options;
   }
 
   /**
@@ -273,12 +322,11 @@ class SelectFormField extends FormField {
    * transfer [{ value: 'a', text: 'A' }] to [{ key: 'x', label: 'A' }]
    */
   processValue(value) {
-    const me = this;
     let newValue = value;
     if (value === undefined) {
-      newValue = me.state.value;
+      newValue = this.state.value;
     }
-    if (!me.props.jsxfetchUrl && !me.props.onSearch) {
+    if (!this.props.jsxfetchUrl && !this.props.onSearch) {
       return newValue;
     }
     if (typeof newValue === 'string') {
@@ -300,22 +348,15 @@ class SelectFormField extends FormField {
   }
 
   addSpecificClass() {
-    const me = this;
-    if (me.props.jsxprefixCls === 'kuma-uxform-field') {
-      return `${me.props.jsxprefixCls} kuma-select-uxform-field`;
+    if (this.props.jsxprefixCls === 'kuma-uxform-field') {
+      return `${this.props.jsxprefixCls} kuma-select-uxform-field`;
     }
-    return me.props.jsxprefixCls;
+    return this.props.jsxprefixCls;
   }
 
   renderField() {
-    const me = this;
     const arr = [];
-    const mode = me.props.jsxmode || me.props.mode;
-
-    let safeLocale = me.props.locale || 'zh-cn';
-    if (['zh-cn', 'en', 'en-us'].indexOf(safeLocale) === -1) {
-      safeLocale = 'zh-cn';
-    }
+    const mode = this.props.jsxmode || this.props.mode;
 
     const loadingView = <div className="kuma-loading-s kuma-select-uxform-options-loading" />;
 
@@ -323,56 +364,56 @@ class SelectFormField extends FormField {
       const options = {
         ref: (c) => { this.select = c; },
         key: 'select',
-        style: me.props.jsxstyle,
-        multiple: me.props.jsxmultiple,
-        allowClear: me.props.jsxallowClear,
-        combobox: me.props.jsxcombobox,
-        searchPlaceholder: me.props.jsxsearchPlaceholder,
-        tags: me.props.jsxtags,
-        disabled: !!me.props.jsxdisabled,
-        showSearch: me.props.jsxshowSearch,
-        placeholder: me.props.jsxplaceholder || defaultLabels.placeholder[safeLocale],
-        onChange: me.handleChange.bind(me),
-        onSearch: me.handleSearch.bind(me),
+        style: this.props.jsxstyle,
+        multiple: this.props.jsxmultiple,
+        allowClear: this.props.jsxallowClear,
+        combobox: this.props.jsxcombobox,
+        searchPlaceholder: this.props.jsxsearchPlaceholder,
+        tags: this.props.jsxtags,
+        disabled: !!this.props.jsxdisabled,
+        showSearch: this.props.jsxshowSearch,
+        placeholder: this.props.jsxplaceholder || defaultLabels.placeholder[this.safeLocale],
+        onChange: this.handleChange.bind(this),
+        onSearch: this.handleSearch.bind(this),
         onSelect: (...args) => {
           if (this.props.onSelect) {
             this.props.onSelect(...args);
           }
         },
-        size: me.getSize(),
+        size: this.getSize(),
       };
 
-      if (me.props.jsxfetchUrl) {
+      if (this.props.jsxfetchUrl) {
         options.filterOption = false;
       }
 
       selectOptions.forEach((item) => {
-        if (item in me.props) {
-          options[item] = me.props[item];
+        if (item in this.props) {
+          options[item] = this.props[item];
         }
       });
 
-      if (!{}.hasOwnProperty.call(me.props, 'notFoundContent')) {
-        options.notFoundContent = defaultLabels.notFoundContent[safeLocale];
+      if (!{}.hasOwnProperty.call(this.props, 'notFoundContent')) {
+        options.notFoundContent = defaultLabels.notFoundContent[this.safeLocale];
       }
 
-      if (me.state.loading) {
-        options.notFoundContent = me.props.loadingView || loadingView;
+      if (this.state.loading) {
+        options.notFoundContent = this.props.loadingView || loadingView;
       }
 
       // only jsxfetchUrl mode need pass label, for the options always change.
       // when mount, state.label is undefined, which cause defalutValue cannot be used.
-      if (me.props.jsxfetchUrl || me.props.onSearch) {
+      if (this.props.jsxfetchUrl || this.props.onSearch) {
         options.labelInValue = true;
       }
 
-      options.value = me.processValue() || [];
+      options.value = this.processValue() || [];
 
       /* eslint-disable no-underscore-dangle */
       /* used in SearchFormField */
       arr.push(
         <Select {...options}>
-          {me._generateOptionsFromData()}
+          {this._generateOptionsFromData()}
         </Select>,
       );
       /* eslint-enable no-underscore-dangle */
@@ -380,10 +421,10 @@ class SelectFormField extends FormField {
       let str = '';
       const renderValues = [];
       const splitter = ', \u00a0';
-      if (me.state.value) {
-        const value = me.processValue();
+      if (this.state.value) {
+        const value = this.processValue();
         const values = !Array.isArray(value) ? [value] : value;
-        if (me.props.jsxfetchUrl || me.props.onSearch || me.props.labelInValue) {
+        if (this.props.jsxfetchUrl || this.props.onSearch || this.props.labelInValue) {
           // labelInValue mode
           str = values.map((item) => {
             const label = item.label || item.key;
@@ -395,13 +436,13 @@ class SelectFormField extends FormField {
 
             return label;
           }).join(splitter);
-        } else if (me.props.children) {
+        } else if (this.props.children) {
           // <Option> mode
           const optionsLabel = [];
-          me.props.children.forEach((child) => {
+          this.props.children.forEach((child) => {
             const valuePropValue = getValuePropValue(child);
             if (values.indexOf(valuePropValue) !== -1) {
-              const label = `${child.props[me.props.optionLabelProp]}`;
+              const label = `${child.props[this.props.optionLabelProp]}`;
 
               optionsLabel.push(label);
 
@@ -416,7 +457,7 @@ class SelectFormField extends FormField {
         } else {
           // only jsxdata
           str = values.map((item) => {
-            const label = transferDataToObj(me.state.data)[item === '' ? '__all__' : item];
+            const label = transferDataToObj(this.state.data)[item === '' ? '__all__' : item];
 
             renderValues.push({
               value: item,
@@ -428,8 +469,8 @@ class SelectFormField extends FormField {
         }
       }
 
-      if (me.props.renderView) {
-        str = me.props.renderView(renderValues);
+      if (this.props.renderView) {
+        str = this.props.renderView(renderValues);
       }
 
       arr.push(
@@ -453,6 +494,7 @@ SelectFormField.propTypes = assign({}, FormField.propTypes, {
     PropTypes.array,
   ]),
   searchDelay: PropTypes.number,
+  searchKey: PropTypes.string,
   beforeFetch: PropTypes.func,
   afterFetch: PropTypes.func,
   jsxshowSearch: PropTypes.bool,
@@ -467,6 +509,7 @@ SelectFormField.propTypes = assign({}, FormField.propTypes, {
   method: PropTypes.string,
   fetchMethod: PropTypes.string,
   fetchHeader: PropTypes.object,
+  fetchSizeOptions: PropTypes.object,
   dropdownAlign: PropTypes.object,
   optionTextRender: PropTypes.func,
   renderView: PropTypes.func,
@@ -480,6 +523,7 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   jsxcombobox: false,
   jsxdata: {},
   searchDelay: 100,
+  searchKey: 'q',
   beforeFetch: obj => obj,
   afterFetch: obj => obj,
   fitResponse: response => ({
@@ -498,6 +542,7 @@ SelectFormField.defaultProps = assign({}, FormField.defaultProps, {
   method: 'GET',
   fetchMethod: undefined,
   fetchHeader: undefined,
+  fetchSizeOptions: undefined,
   dropdownAlign: {
     points: ['tl', 'bl', 'tr', 'br'],
     offset: [0, 4],
