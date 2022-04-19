@@ -1,7 +1,7 @@
 /**
  * Created by xy on 15/4/13.
  */
-import React from 'react';
+import React, { isValidElement } from 'react';
 import PropTypes from 'prop-types';
 import FormField from 'uxcore-form-field';
 import Constants from 'uxcore-const';
@@ -205,27 +205,49 @@ class SelectFormField extends FormField {
     });
   }
 
-  handleChange(value) {
+  handleChange(value, option) {
     const {
-      useValueText, jsxfetchUrl, onSearch, labelInValue,
+      useValueText, jsxfetchUrl, onSearch, labelInValue, optionTextRender, dropElementFromLabel,
     } = this.props;
     const labelInValueMode = !!jsxfetchUrl || !!onSearch || labelInValue;
+    const processLabel = (label, op) => {
+      if (optionTextRender && dropElementFromLabel && isValidElement(label) && op) {
+        return op.props.title;
+      }
+      return label;
+    };
     if (labelInValueMode && useValueText) {
       let newValue = value;
       if (Array.isArray(value)) {
-        newValue = value.map(item => ({
+        newValue = value.map((item, index) => ({
           value: item.key,
-          text: item.label,
+          text: processLabel(item.label, option[index]),
         }));
       } else if (typeof value === 'object' && value !== null) {
         newValue = {
           value: value.key,
-          text: value.label,
+          text: processLabel(value.label, option),
         };
       }
       this.handleDataChange(newValue);
     } else {
-      this.handleDataChange(value);
+      let newValue = value;
+      if (optionTextRender && labelInValueMode) {
+        if (Array.isArray(value)) {
+          newValue = newValue.map((item, index) => {
+            return {
+              ...item,
+              label: processLabel(item.label, option[index]),
+            };
+          });
+        } else if (typeof value === 'object' && value !== null) {
+          newValue = {
+            ...newValue,
+            label: processLabel(value.label, option),
+          };
+        }
+      }
+      this.handleDataChange(newValue);
     }
   }
 

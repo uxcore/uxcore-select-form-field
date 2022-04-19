@@ -1,3 +1,6 @@
+## 0.4.26
+* `CHANGED` drop React Element from label when dropElementFromLabel is true
+
 ## 0.4.24
 * `CHANGE` add title which is different with label for option
 
