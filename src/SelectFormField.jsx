@@ -321,20 +321,21 @@ class SelectFormField extends FormField {
    * 多选时返回数组，单选时返回 object
    * 新增 value is object。
    */
-  getFullData() {
+  getFullData(changedValue) {
     const { data, value } = this.state;
-    if (Array.isArray(value)) {
-      return value.map((selectItem) => {
+    const selectedItems = changedValue || value;
+    if (Array.isArray(selectedItems)) {
+      return selectedItems.map((selectItem) => {
         if (isObject(selectItem)) {
           return find(data, item => item.value === selectItem.key);
         }
         return find(data, item => item.value === selectItem);
       }).filter(i => i !== undefined);
     }
-    if (isObject(value)) {
-      return find(data, item => item.value === value.key);
+    if (isObject(selectedItems)) {
+      return find(data, item => item.value === selectedItems.key);
     }
-    return find(data, item => item.value === value);
+    return find(data, item => item.value === selectedItems);
   }
 
   /**
